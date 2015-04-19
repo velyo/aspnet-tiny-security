@@ -1,1 +1,1 @@
-# aspnet-tiny-membership
+# ASP.NET Tiny Security
