@@ -13,6 +13,10 @@ Tiny Membership Providers best fit for sites with small number of authenticated 
 
 For further details check out the Documentation.
 
+## Building the project
+
+[![Build status](https://ci.appveyor.com/api/projects/status/h3f3qnwosm3r7ptu?svg=true)](https://ci.appveyor.com/project/velio_ivanov/aspnet-tiny-security)
+
 ## Getting started
 
 ```
