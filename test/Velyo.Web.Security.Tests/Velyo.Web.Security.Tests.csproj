@@ -9,8 +9,8 @@
     <ProjectGuid>{FECD57FC-B43B-4470-85F5-226D5604D3C2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Velyo.Web.Security.Tests</RootNamespace>
-    <AssemblyName>Velyo.Web.Security.Tests</AssemblyName>
+    <RootNamespace>Alienlab.Web.Security</RootNamespace>
+    <AssemblyName>Alienlab.Web.Security.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

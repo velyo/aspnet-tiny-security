@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Web.Security;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Runtime.CompilerServices;
-using System.Security.Permissions;
+﻿using System.Collections.Generic;
 
-namespace Velyo.Web.Security.Store {
+namespace Alienlab.Web.Security.Store {
 
     /// <summary>
     /// 

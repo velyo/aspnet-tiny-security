@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="Change Password" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
-    CodeBehind="ChangePassword.aspx.cs" Inherits="Velyo.Web.Security.Sample.Account.ChangePassword" %>
+    CodeBehind="ChangePassword.aspx.cs" Inherits="Alienlab.Web.Security.Sample.Account.ChangePassword" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>

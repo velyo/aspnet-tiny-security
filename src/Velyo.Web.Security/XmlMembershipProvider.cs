@@ -2,20 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration.Provider;
-using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Web;
 using System.Web.Hosting;
 using System.Web.Security;
-using System.Web.UI;
-using Velyo.Web.Security.Store;
+
+using Alienlab.Web.Security.Store;
 using System.Web.Profile;
 
-namespace Velyo.Web.Security {
+namespace Alienlab.Web.Security {
 
     /// <summary>
     /// Specialized MembershipProvider that uses a file (Users.config) to store its data.

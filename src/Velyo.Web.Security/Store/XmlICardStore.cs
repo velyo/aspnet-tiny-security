@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Velyo.Web.Security.Store {
+namespace Alienlab.Web.Security.Store {
 
     /// <summary>
     /// TODO change XmlUserStore Delete to remove the associated ICard, if any.

@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="Register" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
-    CodeBehind="Register.aspx.cs" Inherits="Velyo.Web.Security.Sample.Account.Register" %>
+    CodeBehind="Register.aspx.cs" Inherits="Alienlab.Web.Security.Sample.Account.Register" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>

@@ -4,10 +4,10 @@ using System.Collections.Specialized;
 using System.Configuration.Provider;
 using System.Linq;
 using System.Web.Hosting;
-using Velyo.Web.Security.Resources;
-using Velyo.Web.Security.Store;
+using Alienlab.Web.Security.Resources;
+using Alienlab.Web.Security.Store;
 
-namespace Velyo.Web.Security {
+namespace Alienlab.Web.Security {
 
     /// <summary>
     /// Custom XML implementation of <c>System.Web.Security.RoleProvider</c>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Alienlab.Web.Security</id>
+        <version>2.0.0.0</version>
+        <title>Tiny Xml Security Providers</title>
+        <authors>Alen Pelin and Velio Ivanov</authors>
+        <owners>Alen Pelin and Velio Ivanov</owners>
+        <licenseUrl>http://tinyproviders.codeplex.com/license</licenseUrl>
+        <projectUrl>http://github.com/alienlab/Alienlab.Web.Security</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A shared library with web security tiny membership providers and base functionality for building ASP.NET custom membership providers. Currently it holds only XML membership providers - a migration of ASP.NET XMLProviders for .NET 4</description>
+        <language>en-US</language>
+        <tags>artem tiny web security membership role profile provider .net40</tags>
+    </metadata>
+    <files>
+        <file src="bin\Release\Alienlab.Web.Security.dll" target="content\bin\Alienlab.Web.Security.dll" />
+        <file src="web.config.transform" target="content\web.config.transform" />
+        <file src="bin\Release\Alienlab.Web.Security.dll" target="lib\Alienlab.Web.Security.dll" />
+        <file src="bin\Release\Alienlab.Web.Security.pdb" target="lib\Alienlab.Web.Security.pdb" />
+        <file src="bin\Release\Alienlab.Web.Security.xml" target="lib\Alienlab.Web.Security.xml" />
+    </files>
+</package>

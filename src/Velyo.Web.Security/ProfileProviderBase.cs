@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Web.Profile;
 using System.Globalization;
 
-namespace Velyo.Web.Security {
+namespace Alienlab.Web.Security {
 
     /// <summary>
     /// 

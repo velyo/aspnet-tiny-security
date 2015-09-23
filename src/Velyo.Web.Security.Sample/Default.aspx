@@ -1,4 +1,4 @@
-﻿<%@ Page Title=" Tiny Membership Providers- Home Page" Language="C#" MasterPageFile="~/Site.master"AutoEventWireup="false"CodeBehind="Default.aspx.cs"Inherits="Velyo.Web.Security.Sample._Default" %>
+﻿<%@ Page Title=" Tiny Membership Providers- Home Page" Language="C#" MasterPageFile="~/Site.master"AutoEventWireup="false"CodeBehind="Default.aspx.cs"Inherits="Alienlab.Web.Security.Sample._Default" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
