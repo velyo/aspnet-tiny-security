@@ -1,14 +1,12 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Security;
 
 [assembly: AssemblyTitle("ASP.NET Tiny Security")]
 [assembly: AssemblyDescription("A shared library with web security tiny membership providers and base functionality for building ASP.NET custom membership providers.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Velio Ivanov [http://artembg.com]")]
-[assembly: AssemblyProduct("ASP.NET Tiny Security [https://github.com/velio/aspnet-tiny-security]")]
-[assembly: AssemblyCopyright("Copyright © Velyo 2015")]
+[assembly: AssemblyProduct("ASP.NET Tiny Security [https://github.com/alienlab/aspnet-tiny-security]")]
+[assembly: AssemblyCopyright("Copyright © Alienlab.Web.Security 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -18,4 +16,6 @@ using System.Security;
 
 //[assembly: AllowPartiallyTrustedCallers]
 
-[assembly: AssemblyVersion("2.0.*")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyInformationalVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]

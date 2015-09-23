@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="false"CodeBehind="Default.aspx.cs"Inherits="Velyo.Web.Security.Sample.Pages.Roles.Default" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="false"CodeBehind="Default.aspx.cs"Inherits="Alienlab.Web.Security.Sample.Pages.Roles.Default" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>

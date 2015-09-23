@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Velyo.Web.Security.Store {
+namespace Alienlab.Web.Security.Store {
 
     /// <summary>
     /// 

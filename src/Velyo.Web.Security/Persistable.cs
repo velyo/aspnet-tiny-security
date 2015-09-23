@@ -1,16 +1,15 @@
 using System;
 using System.Collections;
 using System.IO;
-using System.Security;
 using System.Threading;
 using System.Web;
 using System.Web.Caching;
 using System.Xml.Serialization;
 using System.Text;
 using System.ComponentModel;
-using Velyo.Web.Security.Resources;
+using Alienlab.Web.Security.Resources;
 
-namespace Velyo {
+namespace Alienlab.Web.Security {
 
     /// <summary>
     /// Generic class for a perssitable object.

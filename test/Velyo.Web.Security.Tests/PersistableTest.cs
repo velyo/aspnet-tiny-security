@@ -1,11 +1,10 @@
 ﻿using System;
-using System.IO;
-using Artem;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace Artem.Web.Security.Tests {
+namespace Alienlab.Web.Security.Tests {
 
     /// <summary>
     ///This is a test class for PersistableTest and is intended

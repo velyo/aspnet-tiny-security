@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Web.Hosting;
 using System.Web.Profile;
-using Velyo.Web.Security.Store;
+using Alienlab.Web.Security.Store;
 
-namespace Velyo.Web.Security {
+namespace Alienlab.Web.Security {
 
     /// <summary>
     /// Summary description for XmlProfileProvider
