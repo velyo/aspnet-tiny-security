@@ -333,18 +333,19 @@ namespace Velyo.Web.Security {
                 if (!string.IsNullOrEmpty(username)) {
                     XmlProfile profile = this.GetProfile(username);
 
-                    if (profile != null) {
-                        foreach (SettingsProperty prop in collection) {
-                            if (prop.SerializeAs == SettingsSerializeAs.ProviderSpecific) {
-                                if (prop.PropertyType.IsPrimitive || (prop.PropertyType == typeof(string))) {
-                                    prop.SerializeAs = SettingsSerializeAs.String;
-                                }
-                                else {
-                                    prop.SerializeAs = SettingsSerializeAs.Xml;
-                                }
+                    foreach (SettingsProperty prop in collection) {
+                        if (prop.SerializeAs == SettingsSerializeAs.ProviderSpecific) {
+                            if (prop.PropertyType.IsPrimitive || (prop.PropertyType == typeof(string))) {
+                                prop.SerializeAs = SettingsSerializeAs.String;
                             }
-                            coll.Add(new SettingsPropertyValue(prop));
+                            else {
+                                prop.SerializeAs = SettingsSerializeAs.Xml;
+                            }
                         }
+                        coll.Add(new SettingsPropertyValue(prop));
+                    }
+
+                    if (profile != null) {
                         GetPropertyValues(profile.Names, profile.ValuesString, profile.ValuesBinary, coll);
                     }
                 }
