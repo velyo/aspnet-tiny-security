@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{30BD3A07-7552-44AD-B407-85E5017E2C71}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,7 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{35AE17
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EBF0EC67-9AE7-465A-ACFC-E70C241A5208}"
 	ProjectSection(SolutionItems) = preProject
+		key.snk = key.snk
 		LICENSE = LICENSE
+		my.nukey = my.nukey
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -30,6 +32,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Velyo.Web.Security.Tests", "test\Velyo.Web.Security.Tests\Velyo.Web.Security.Tests.csproj", "{FECD57FC-B43B-4470-85F5-226D5604D3C2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Velyo.Web.Security.Sample", "src\Velyo.Web.Security.Sample\Velyo.Web.Security.Sample.csproj", "{62ADF770-6C2C-40FF-A72C-DCD02B654A10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Velyo.Web.Security.Xml", "src\Velyo.Web.Security.Xml\Velyo.Web.Security.Xml.csproj", "{504FDAAB-00BA-4EBF-8C7E-E683B17149E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +52,10 @@ Global
 		{62ADF770-6C2C-40FF-A72C-DCD02B654A10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62ADF770-6C2C-40FF-A72C-DCD02B654A10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62ADF770-6C2C-40FF-A72C-DCD02B654A10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{504FDAAB-00BA-4EBF-8C7E-E683B17149E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{504FDAAB-00BA-4EBF-8C7E-E683B17149E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{504FDAAB-00BA-4EBF-8C7E-E683B17149E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{504FDAAB-00BA-4EBF-8C7E-E683B17149E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -51,10 +51,11 @@
     <DocumentationFile>bin\Release\Velyo.Web.Security.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -81,21 +82,6 @@
     </Compile>
     <Compile Include="RoleProviderBase.cs" />
     <Compile Include="SecurityUtil.cs" />
-    <Compile Include="Store\Gender.cs" />
-    <Compile Include="Store\XmlICard.cs" />
-    <Compile Include="Store\XmlICardStore.cs" />
-    <Compile Include="Store\XmlProfile.cs" />
-    <Compile Include="Store\XmlProfileStore.cs" />
-    <Compile Include="Store\XmlRole.cs" />
-    <Compile Include="Store\XmlRoleStore.cs" />
-    <Compile Include="Store\XmlUser.cs" />
-    <Compile Include="Store\XmlUserStore.cs" />
-    <Compile Include="XmlMembershipProvider.cs" />
-    <Compile Include="XmlProfileProvider.cs" />
-    <Compile Include="XmlRoleProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
