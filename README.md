@@ -7,7 +7,7 @@ The goal of this project is to provide custom implementation of ASP.NET provider
 * Native support and usage by all ASP.NET membership controls;
 * Supports all password formats: Clear, Encrypted and Hashed;
 
-Tiny Security Providers best fit for sites with a small number of authenticated users and hosted on servers with no database access.  
+Tiny Security Providers best fit for sites with a small number of authenticated users and hosted without database access.  
 It is not recommended to use the providers with "heavy-duty" membership sites (a lot of roles, users and big number of members), because of the tiny data storages.
 
 ## Building the project
