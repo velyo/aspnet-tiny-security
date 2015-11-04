@@ -10,8 +10,6 @@ The goal of this project is to provide custom implementation of ASP.NET provider
 Please haave in mind, because of the tiny data storages, it is not recommended to use this providers with "heavy-duty" membership sites (a lot of roles, users and big number of members).  
 Tiny Security Providers best fit for sites with small number of authenticated users and hosted on servers with no database access.
 
-For further details check out the Documentation.
-
 ## Building the project
 
 [![Build status](https://ci.appveyor.com/api/projects/status/h3f3qnwosm3r7ptu?svg=true)](https://ci.appveyor.com/project/velio_ivanov/aspnet-tiny-security)
