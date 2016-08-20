@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/velyo/aspnet-tiny-security.png?label=ready&title=Ready)](https://waffle.io/velyo/aspnet-tiny-security)
 # ASP.NET Tiny Security
 
 [![Join the chat at https://gitter.im/aspnet-tiny-security/Lobby](https://badges.gitter.im/aspnet-tiny-security/Lobby.svg)](https://gitter.im/aspnet-tiny-security/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
