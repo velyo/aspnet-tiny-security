@@ -1,4 +1,6 @@
 # ASP.NET Tiny Security
+
+[![Join the chat at https://gitter.im/aspnet-tiny-security/Lobby](https://badges.gitter.im/aspnet-tiny-security/Lobby.svg)](https://gitter.im/aspnet-tiny-security/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build status](https://ci.appveyor.com/api/projects/status/h3f3qnwosm3r7ptu?svg=true)](https://ci.appveyor.com/project/velio_ivanov/aspnet-tiny-security) 
 
 ASP.NET Tiny Security Providers is a free, open source, pack of tiny ASP.NET Membership, Role and Profile providers.
