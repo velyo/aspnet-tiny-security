@@ -1,8 +1,8 @@
-[![Stories in Ready](https://badge.waffle.io/velyo/aspnet-tiny-security.png?label=ready&title=Ready)](https://waffle.io/velyo/aspnet-tiny-security)
 # ASP.NET Tiny Security
 
+[![Build status](https://ci.appveyor.com/api/projects/status/h3f3qnwosm3r7ptu?svg=true)](https://ci.appveyor.com/project/velio_ivanov/aspnet-tiny-security)
 [![Join the chat at https://gitter.im/aspnet-tiny-security/Lobby](https://badges.gitter.im/aspnet-tiny-security/Lobby.svg)](https://gitter.im/aspnet-tiny-security/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build status](https://ci.appveyor.com/api/projects/status/h3f3qnwosm3r7ptu?svg=true)](https://ci.appveyor.com/project/velio_ivanov/aspnet-tiny-security) 
+[![Stories in Ready](https://badge.waffle.io/velyo/aspnet-tiny-security.png?label=ready&title=Ready)](https://waffle.io/velyo/aspnet-tiny-security) 
 
 ASP.NET Tiny Security Providers is a free, open source, pack of tiny ASP.NET Membership, Role and Profile providers.
 The goal of this project is to provide custom implementation of ASP.NET providers against tiny data storages (XML, SQL Compact etc.).
