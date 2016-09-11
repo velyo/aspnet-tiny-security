@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Velyo.Web.Security.Tests</RootNamespace>
     <AssemblyName>Velyo.Web.Security.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile />
@@ -57,12 +57,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Shadow Include="Test References\Artem.Web.Security.accessor" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Velyo.Web.Security\Velyo.Web.Security.csproj">
-      <Project>{3BB45DD4-FB05-4005-9035-BC984E9D98DD}</Project>
-      <Name>Velyo.Web.Security</Name>
+    <ProjectReference Include="..\..\src\Velyo.Web.Security.Xml\Velyo.Web.Security.Xml.csproj">
+      <Project>{504fdaab-00ba-4ebf-8c7e-e683b17149e5}</Project>
+      <Name>Velyo.Web.Security.Xml</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

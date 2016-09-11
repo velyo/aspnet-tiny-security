@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>bb01c50b-63d3-47b8-bc09-a98e553f6f89</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\NameValueCollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MembershipProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Gender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Card.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Profile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Role.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Persistable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProfileProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Resources\Messages.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RoleProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SecurityUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Messages.resx" />
+  </ItemGroup>
+</Project>

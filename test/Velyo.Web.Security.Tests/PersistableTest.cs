@@ -4,6 +4,7 @@ using Artem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Velyo;
 
 namespace Artem.Web.Security.Tests {
 

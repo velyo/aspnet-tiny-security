@@ -43,30 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Velyo.Web.Security\Extensions\NameValueCollectionExtensions.cs">
-      <Link>Extensions\NameValueCollectionExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Velyo.Web.Security\Extensions\StringExtensions.cs">
-      <Link>Extensions\StringExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Velyo.Web.Security\MembershipProviderBase.cs">
-      <Link>MembershipProviderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Velyo.Web.Security\Persistable.cs">
-      <Link>Persistable.cs</Link>
-    </Compile>
-    <Compile Include="..\Velyo.Web.Security\ProfileProviderBase.cs">
-      <Link>ProfileProviderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Velyo.Web.Security\Resources\Messages.Designer.cs">
-      <Link>Resources\Messages.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Messages.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Velyo.Web.Security\RoleProviderBase.cs">
-      <Link>RoleProviderBase.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Store\Gender.cs" />
     <Compile Include="Store\XmlICard.cs" />
@@ -81,13 +57,7 @@
     <Compile Include="XmlProfileProvider.cs" />
     <Compile Include="XmlRoleProvider.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\Velyo.Web.Security\Resources\Messages.resx">
-      <Link>Resources\Messages.resx</Link>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

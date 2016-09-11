@@ -54,12 +54,14 @@
   <XmlUser>
     <UserKey>c530f412-025f-46a4-9ce8-b23fb2f67809</UserKey>
     <UserName>velio</UserName>
-    <Password>bateto</Password>
+    <Password>velio</Password>
     <PasswordSalt />
     <Email>velio.ivanov@gmail.com</Email>
+    <PasswordQuestion />
+    <PasswordAnswer />
     <CreationDate>2015-11-03T10:37:16.4803443+02:00</CreationDate>
-    <LastActivityDate>2015-11-03T10:37:16.4803443+02:00</LastActivityDate>
-    <LastLoginDate>0001-01-01T00:00:00</LastLoginDate>
+    <LastActivityDate>2016-09-11T15:03:20.6875296+03:00</LastActivityDate>
+    <LastLoginDate>2016-09-11T15:03:20.6875296+03:00</LastLoginDate>
     <LastPasswordChangeDate>2015-11-03T10:37:16.4803443+02:00</LastPasswordChangeDate>
     <LastLockoutDate>9999-12-31T23:59:59.9999999</LastLockoutDate>
     <IsApproved>true</IsApproved>
