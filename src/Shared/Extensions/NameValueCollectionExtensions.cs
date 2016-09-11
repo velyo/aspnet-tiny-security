@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace System.Collections.Specialized {
-
-    /// <summary>
-    /// 
-    /// </summary>
-    static class XtsNameValueCollection {
-
-        #region Static Methods ////////////////////////////////////////////////////////////////////
-
+﻿namespace System.Collections.Specialized
+{
+    static class NameValueCollectionExtensions
+    {
         /// <summary>
         /// Gets the bool.
         /// </summary>
@@ -19,12 +9,14 @@ namespace System.Collections.Specialized {
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">if set to <c>true</c> [default value].</param>
         /// <returns></returns>
-        public static bool GetBool(this NameValueCollection collection, string key, bool defaultValue) {
-
+        public static bool GetBool(this NameValueCollection collection, string key, bool defaultValue)
+        {
             bool result = defaultValue;
             string value = collection[key];
             if (!string.IsNullOrEmpty(value))
+            {
                 bool.TryParse(value, out result);
+            }
             return result;
         }
 
@@ -34,7 +26,8 @@ namespace System.Collections.Specialized {
         /// <param name="collection">The collection.</param>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public static bool GetBool(this NameValueCollection collection, string key) {
+        public static bool GetBool(this NameValueCollection collection, string key)
+        {
             return GetBool(collection, key, false);
         }
 
@@ -45,12 +38,14 @@ namespace System.Collections.Specialized {
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <returns></returns>
-        public static DateTime GetDate(this NameValueCollection collection, string key, DateTime defaultValue) {
-
+        public static DateTime GetDate(this NameValueCollection collection, string key, DateTime defaultValue)
+        {
             DateTime result = defaultValue;
             string value = collection[key];
             if (!string.IsNullOrEmpty(value))
+            {
                 DateTime.TryParse(value, out result);
+            }
             return result;
         }
 
@@ -60,7 +55,8 @@ namespace System.Collections.Specialized {
         /// <param name="collection">The collection.</param>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public static DateTime GetDate(this NameValueCollection collection, string key) {
+        public static DateTime GetDate(this NameValueCollection collection, string key)
+        {
             return GetDate(collection, key, DateTime.MinValue);
         }
 
@@ -72,12 +68,14 @@ namespace System.Collections.Specialized {
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <returns></returns>
-        public static T GetEnum<T>(this NameValueCollection collection, string key, T defaultValue) {
-
+        public static T GetEnum<T>(this NameValueCollection collection, string key, T defaultValue)
+        {
             T result = defaultValue;
             string value = collection[key];
             if (!string.IsNullOrEmpty(value))
+            {
                 result = (T)Enum.Parse(typeof(T), value, true);
+            }
             return result;
         }
 
@@ -88,7 +86,8 @@ namespace System.Collections.Specialized {
         /// <param name="collection">The collection.</param>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public static T GetEnum<T>(this NameValueCollection collection, string key) {
+        public static T GetEnum<T>(this NameValueCollection collection, string key)
+        {
             return GetEnum<T>(collection, key, default(T));
         }
 
@@ -99,12 +98,14 @@ namespace System.Collections.Specialized {
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <returns></returns>
-        public static int GetInt(this NameValueCollection collection, string key, int defaultValue) {
-
+        public static int GetInt(this NameValueCollection collection, string key, int defaultValue)
+        {
             int result = defaultValue;
             string value = collection[key];
             if (!string.IsNullOrEmpty(value))
+            {
                 int.TryParse(value, out result);
+            }
             return result;
         }
 
@@ -114,7 +115,8 @@ namespace System.Collections.Specialized {
         /// <param name="collection">The collection.</param>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public static int GetInt(this NameValueCollection collection, string key) {
+        public static int GetInt(this NameValueCollection collection, string key)
+        {
             return GetInt(collection, key, 0);
         }
 
@@ -125,7 +127,8 @@ namespace System.Collections.Specialized {
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <returns></returns>
-        public static string GetString(this NameValueCollection collection, string key, string defaultValue) {
+        public static string GetString(this NameValueCollection collection, string key, string defaultValue)
+        {
             return collection[key] ?? defaultValue;
         }
 
@@ -135,9 +138,9 @@ namespace System.Collections.Specialized {
         /// <param name="collection">The collection.</param>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public static string GetString(this NameValueCollection collection, string key) {
+        public static string GetString(this NameValueCollection collection, string key)
+        {
             return GetString(collection, key, null);
         }
-        #endregion
     }
 }

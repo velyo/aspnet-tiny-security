@@ -2,6 +2,7 @@ using System;
 
 namespace Velyo.Web.Security.Models
 {
+    [Serializable]
     public class User
     {
         public Guid UserKey { get; set; } = Guid.Empty;

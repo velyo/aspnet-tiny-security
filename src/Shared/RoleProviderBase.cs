@@ -1,24 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web.Security;
 using System.Collections.Specialized;
 
-namespace Velyo.Web.Security {
+namespace Velyo.Web.Security
+{
+    public abstract class RoleProviderBase : RoleProvider
+    {
+        private static readonly object _syncRoot = new object();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public abstract class RoleProviderBase : RoleProvider {
-
-        #region Fields  ///////////////////////////////////////////////////////////////////////////
-
-        static readonly object _syncRoot = new object();
-
-        #endregion
-
-        #region Properties  ///////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Gets or sets the name of the application to store and retrieve role information for.
@@ -57,9 +46,6 @@ namespace Velyo.Web.Security {
         /// <value><c>true</c> if [use universal time]; otherwise, <c>false</c>.</value>
         protected virtual bool UseUniversalTime { get; set; }
 
-        #endregion
-
-        #region Methods ///////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Initializes the provider.
@@ -69,19 +55,17 @@ namespace Velyo.Web.Security {
         /// <exception cref="T:System.ArgumentNullException">The name of the provider is null.</exception>
         /// <exception cref="T:System.ArgumentException">The name of the provider has a length of zero.</exception>
         /// <exception cref="T:System.InvalidOperationException">An attempt is made to call <see cref="M:System.Configuration.Provider.ProviderBase.Initialize(System.String,System.Collections.Specialized.NameValueCollection)"/> on a provider after the provider has already been initialized.</exception>
-        public override void Initialize(string name, NameValueCollection config) {
+        public override void Initialize(string name, NameValueCollection config)
+        {
             base.Initialize(name, config);
 
             string defaultAppName = System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath;
-            this.ApplicationName = config.GetString("applicationName", defaultAppName);
+            ApplicationName = config.GetString("applicationName", defaultAppName);
 
-            this.CaseSensitive = config.GetBool("caseSensitive", false);
-            this.Comparer = this.CaseSensitive
-                ? StringComparer.CurrentCulture : StringComparer.CurrentCultureIgnoreCase;
-            this.Comparison = this.CaseSensitive
-                    ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
-            this.UseUniversalTime = config.GetBool("useUniversalTime", false);
+            CaseSensitive = config.GetBool("caseSensitive", false);
+            Comparer = CaseSensitive ? StringComparer.CurrentCulture : StringComparer.CurrentCultureIgnoreCase;
+            Comparison = CaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
+            UseUniversalTime = config.GetBool("useUniversalTime", false);
         }
-        #endregion
     }
 }

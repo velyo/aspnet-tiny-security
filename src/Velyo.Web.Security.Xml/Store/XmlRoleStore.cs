@@ -5,7 +5,7 @@ namespace Velyo.Web.Security.Store {
     /// <summary>
     /// 
     /// </summary>
-    public class XmlRoleStore : Persistable<List<XmlRole>> {
+    public class XmlRoleStore : XmlStore<List<XmlRole>> {
 
         #region Properties  ///////////////////////////////////////////////////////////////////////
 

@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace System
+﻿namespace System
 {
     /// <summary>
     /// Extension methods for <see cref="System.String"/>
     /// </summary>
-    public static class StringExtensions
+    static class StringExtensions
     {
-        #region Static Methods ////////////////////////////////////////////////////////////////////
-
         /// <summary>
         /// Formats the specified string with params' values.
         /// </summary>
@@ -58,6 +51,5 @@ namespace System
         {
             return !IsNullOrEmpty(value);
         }
-        #endregion
     }
 }

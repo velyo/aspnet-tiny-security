@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("ASP.NET Tiny Xml Security")]
+[assembly: AssemblyTitle("ASP.NET Tiny Xml Membership")]
 [assembly: AssemblyDescription("ASP.NET XML membership providers - with XML files storage of membership data")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Velyo Ivanov [http://velyo.net]")]
-[assembly: AssemblyProduct("ASP.NET Tiny Security [https://github.com/velyo/aspnet-tiny-security]")]
-[assembly: AssemblyCopyright("Copyright © Velyo 2015")]
+[assembly: AssemblyProduct("ASP.NET Tiny Membership [https://github.com/velyo/aspnet-tiny-security]")]
+[assembly: AssemblyCopyright("Copyright © 2016 Velyo Ivanov")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

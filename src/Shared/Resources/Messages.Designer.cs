@@ -22,7 +22,7 @@ namespace Velyo.Web.Security.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Messages {
+    internal class Messages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace Velyo.Web.Security.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Velyo.Web.Security.Resources.Messages", typeof(Messages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Velyo.Web.Security.Messages", typeof(Messages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Velyo.Web.Security.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,27 +61,72 @@ namespace Velyo.Web.Security.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MembershipProvider cannot decode hashed password..
+        /// </summary>
+        internal static string CannotDecodeHashedPassword {
+            get {
+                return ResourceManager.GetString("CannotDecodeHashedPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot delete a populated role..
         /// </summary>
-        public static string CannotDeletePopulatedRole {
+        internal static string CannotDeletePopulatedRole {
             get {
                 return ResourceManager.GetString("CannotDeletePopulatedRole", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password reset is not enabled..
+        /// </summary>
+        internal static string DisabledPasswordReset {
+            get {
+                return ResourceManager.GetString("DisabledPasswordReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password retrieval is not enabled..
+        /// </summary>
+        internal static string DisabledPasswordRetrieval {
+            get {
+                return ResourceManager.GetString("DisabledPasswordRetrieval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The new password is not valid according to the provider settings..
+        /// </summary>
+        internal static string InvalidPassword {
+            get {
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fail to load persitable object from file {0}..
         /// </summary>
-        public static string LoadFailed {
+        internal static string LoadFailed {
             get {
                 return ResourceManager.GetString("LoadFailed", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password question and answer are required..
+        /// </summary>
+        internal static string RequiredPasswordQuestionAndAnswer {
+            get {
+                return ResourceManager.GetString("RequiredPasswordQuestionAndAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Role name cannot contain commas..
         /// </summary>
-        public static string RoleCannotContainCommas {
+        internal static string RoleCannotContainCommas {
             get {
                 return ResourceManager.GetString("RoleCannotContainCommas", resourceCulture);
             }
@@ -90,7 +135,7 @@ namespace Velyo.Web.Security.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Role name &apos;{0}&apos; already exists..
         /// </summary>
-        public static string RoleExists {
+        internal static string RoleExists {
             get {
                 return ResourceManager.GetString("RoleExists", resourceCulture);
             }
@@ -99,7 +144,7 @@ namespace Velyo.Web.Security.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Role &apos;{0}&apos; does not exist..
         /// </summary>
-        public static string RoleNotExists {
+        internal static string RoleNotExists {
             get {
                 return ResourceManager.GetString("RoleNotExists", resourceCulture);
             }
@@ -108,9 +153,18 @@ namespace Velyo.Web.Security.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Fail to save persitable object to file {0}..
         /// </summary>
-        public static string SaveFailed {
+        internal static string SaveFailed {
             get {
                 return ResourceManager.GetString("SaveFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown password format detected..
+        /// </summary>
+        internal static string UnknownPasswordFormat {
+            get {
+                return ResourceManager.GetString("UnknownPasswordFormat", resourceCulture);
             }
         }
     }

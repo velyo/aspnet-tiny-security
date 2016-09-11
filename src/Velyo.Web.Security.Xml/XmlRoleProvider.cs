@@ -7,86 +7,74 @@ using System.Web.Hosting;
 using Velyo.Web.Security.Resources;
 using Velyo.Web.Security.Store;
 
-namespace Velyo.Web.Security {
-
+namespace Velyo.Web.Security
+{
     /// <summary>
     /// Custom XML implementation of <c>System.Web.Security.RoleProvider</c>
     /// </summary>
-    public class XmlRoleProvider : RoleProviderBase, IDisposable {
-
-        #region Fields  ///////////////////////////////////////////////////////////////////////////
-
-        string _file;
+    public class XmlRoleProvider : RoleProviderBase, IDisposable
+    {
+        private string _file;
         private XmlRoleStore _store;
-
-        #endregion
-
-        #region Properties  ///////////////////////////////////////////////////////////////////////
 
 
         /// <summary>
         /// Gets the roles.
         /// </summary>
         /// <value>The roles.</value>
-        protected List<XmlRole> Roles { get { return this.Store.Roles; } }
+        protected List<XmlRole> Roles { get { return Store.Roles; } }
 
         /// <summary>
         /// Gets the role store.
         /// </summary>
         /// <value>The role store.</value>
-        protected XmlRoleStore Store {
-            get {
+        protected XmlRoleStore Store
+        {
+            get
+            {
                 return _store ?? (_store = new XmlRoleStore(_file));
             }
         }
 
 
-        #endregion
-
-        #region Construct / Destruct //////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlRoleProvider"/> class.
-        /// </summary>
-        public XmlRoleProvider() {
-        }
-
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose() {
-            Store.Dispose();
+        public void Dispose()
+        {
+            if (_store != null)
+            {
+                _store.Dispose();
+                _store = null;
+            }
         }
-
-
-        #endregion
-
-        #region Methods ///////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Adds the specified user names to the specified roles for the configured applicationName.
         /// </summary>
         /// <param name="usernames">A string array of user names to be added to the specified roles.</param>
         /// <param name="roleNames">A string array of the role names to add the specified user names to.</param>
-        public override void AddUsersToRoles(string[] usernames, string[] roleNames) {
+        public override void AddUsersToRoles(string[] usernames, string[] roleNames)
+        {
+            if (usernames == null) throw new ArgumentNullException(nameof(usernames));
+            if (roleNames == null) throw new ArgumentNullException(nameof(roleNames));
 
-            if (usernames == null)
-                throw new ArgumentNullException("usernames");
-            if (roleNames == null)
-                throw new ArgumentNullException("roleNames");
-
-            var comparer = this.Comparer;
-            lock (SyncRoot) {
-                foreach (string rolename in roleNames) {
-                    XmlRole role = this.GetRole(rolename);
-                    if (role != null) {
-                        foreach (string username in usernames) {
+            var comparer = Comparer;
+            lock (SyncRoot)
+            {
+                foreach (string rolename in roleNames)
+                {
+                    XmlRole role = GetRole(rolename);
+                    if (role != null)
+                    {
+                        foreach (string username in usernames)
+                        {
                             if (!role.Users.Contains(username, comparer))
                                 role.Users.Add(username);
                         }
                     }
                 }
-                this.Store.Save();
+                Store.Save();
             }
         }
 
@@ -94,26 +82,29 @@ namespace Velyo.Web.Security {
         /// Adds a new role to the data source for the configured applicationName.
         /// </summary>
         /// <param name="roleName">The name of the role to create.</param>
-        public override void CreateRole(string roleName) {
+        public override void CreateRole(string roleName)
+        {
+            if (roleName == null) throw new ArgumentNullException(nameof(roleName));
+            if (roleName.IndexOf(',') > 0) throw new ArgumentException(Messages.RoleCannotContainCommas);
 
-            if (roleName == null)
-                throw new ArgumentNullException("roleName");
-            if (roleName.IndexOf(',') > 0)
-                throw new ArgumentException(Messages.RoleCannotContainCommas);
-
-            XmlRole role = this.GetRole(roleName);
-            if (role == null) {
-                role = new XmlRole {
+            XmlRole role = GetRole(roleName);
+            if (role == null)
+            {
+                role = new XmlRole
+                {
                     Name = roleName,
                     Users = new List<string>()
                 };
-                lock (SyncRoot) {
-                    this.Store.Roles.Add(role);
-                    this.Store.Save();
+                lock (SyncRoot)
+                {
+                    Store.Roles.Add(role);
+                    Store.Save();
                 }
             }
             else
+            {
                 throw new ProviderException(Messages.RoleExists.F(roleName));
+            }
         }
 
         /// <summary>
@@ -124,18 +115,19 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// true if the role was successfully deleted; otherwise, false.
         /// </returns>
-        public override bool DeleteRole(string roleName, bool throwOnPopulatedRole) {
+        public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
+        {
+            if (roleName == null) throw new ArgumentNullException(nameof(roleName));
 
-            if (roleName == null)
-                throw new ArgumentNullException("roleName");
-
-            lock (SyncRoot) {
-                XmlRole role = this.GetRole(roleName);
-                if (role != null) {
+            lock (SyncRoot)
+            {
+                XmlRole role = GetRole(roleName);
+                if (role != null)
+                {
                     if (throwOnPopulatedRole && (role.Users.Count > 0))
                         throw new ProviderException(Messages.CannotDeletePopulatedRole);
-                    this.Store.Roles.Remove(role);
-                    this.Store.Save();
+                    Store.Roles.Remove(role);
+                    Store.Save();
 
                     return true;
                 }
@@ -151,20 +143,19 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// A string array containing the names of all the users where the user name matches usernameToMatch and the user is a member of the specified role.
         /// </returns>
-        public override string[] FindUsersInRole(string roleName, string usernameToMatch) {
+        public override string[] FindUsersInRole(string roleName, string usernameToMatch)
+        {
+            if (roleName == null) throw new ArgumentNullException(nameof(roleName));
+            if (usernameToMatch == null) throw new ArgumentNullException(nameof(usernameToMatch));
 
-            if (roleName == null)
-                throw new ArgumentNullException("roleName");
-            if (usernameToMatch == null)
-                throw new ArgumentNullException("usernameToMatch");
-
-            var comparison = this.Comparison;
-            var query = from role in this.Roles.AsQueryable()
+            var comparison = Comparison;
+            var query = from role in Roles.AsQueryable()
                         from user in role.Users
                         where (user.IndexOf(usernameToMatch, comparison) >= 0)
                                 && role.Name.Equals(roleName, comparison)
                         select user;
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 return query.ToArray();
             }
         }
@@ -175,10 +166,12 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// A string array containing the names of all the roles stored in the data source for the configured applicationName.
         /// </returns>
-        public override string[] GetAllRoles() {
-            var query = from r in this.Roles
+        public override string[] GetAllRoles()
+        {
+            var query = from r in Roles
                         select r.Name;
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 return query.ToArray();
             }
         }
@@ -188,15 +181,15 @@ namespace Velyo.Web.Security {
         /// </summary>
         /// <param name="roleName">The name.</param>
         /// <returns></returns>
-        public XmlRole GetRole(string roleName) {
+        public XmlRole GetRole(string roleName)
+        {
+            if (roleName == null) throw new ArgumentNullException(nameof(roleName));
 
-            if (roleName == null)
-                throw new ArgumentNullException("roleName");
-
-            var query = from r in this.Roles
-                        where r.Name.Equals(roleName, this.Comparison)
+            var query = from r in Roles
+                        where r.Name.Equals(roleName, Comparison)
                         select r;
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 return query.FirstOrDefault();
             }
         }
@@ -208,14 +201,14 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// A string array containing the names of all the roles that the specified user is in for the configured applicationName.
         /// </returns>
-        public override string[] GetRolesForUser(string username) {
-
-            if (username == null)
-                throw new ArgumentNullException("username");
-            var query = from r in this.Roles
-                        where r.Users.Contains(username, this.Comparer)
+        public override string[] GetRolesForUser(string username)
+        {
+            if (username == null) throw new ArgumentNullException(nameof(username));
+            var query = from r in Roles
+                        where r.Users.Contains(username, Comparer)
                         select r.Name;
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 return query.ToArray();
             }
         }
@@ -227,15 +220,20 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// A string array containing the names of all the users who are members of the specified role for the configured applicationName.
         /// </returns>
-        public override string[] GetUsersInRole(string roleName) {
-
-            XmlRole role = this.GetRole(roleName);
-            if (role != null) {
-                lock (SyncRoot) {
+        public override string[] GetUsersInRole(string roleName)
+        {
+            XmlRole role = GetRole(roleName);
+            if (role != null)
+            {
+                lock (SyncRoot)
+                {
                     return role.Users.ToArray();
                 }
             }
-            throw new ProviderException(Messages.RoleNotExists.F(roleName));
+            else
+            {
+                throw new ProviderException(Messages.RoleNotExists.F(roleName));
+            }
         }
 
         /// <summary>
@@ -246,19 +244,22 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// true if the specified user is in the specified role for the configured applicationName; otherwise, false.
         /// </returns>
-        public override bool IsUserInRole(string username, string roleName) {
+        public override bool IsUserInRole(string username, string roleName)
+        {
+            if (username == null) throw new ArgumentNullException(nameof(username));
 
-            if (username == null)
-                throw new ArgumentNullException("username");
-
-            XmlRole role = this.GetRole(roleName);
-            if (role != null) {
-                lock (SyncRoot) {
-                    return role.Users.Contains(username, this.Comparer);
+            XmlRole role = GetRole(roleName);
+            if (role != null)
+            {
+                lock (SyncRoot)
+                {
+                    return role.Users.Contains(username, Comparer);
                 }
             }
             else
+            {
                 throw new ProviderException(Messages.RoleNotExists.F(roleName));
+            }
         }
 
         /// <summary>
@@ -266,24 +267,25 @@ namespace Velyo.Web.Security {
         /// </summary>
         /// <param name="usernames">A string array of user names to be removed from the specified roles.</param>
         /// <param name="roleNames">A string array of role names to remove the specified user names from.</param>
-        public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames) {
+        public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
+        {
+            if (usernames == null) throw new ArgumentNullException(nameof(usernames));
+            if (roleNames == null) throw new ArgumentNullException(nameof(roleNames));
 
-            if (usernames == null)
-                throw new ArgumentNullException("usernames");
-            if (roleNames == null)
-                throw new ArgumentNullException("roleNames");
-
-            var comparer = this.Comparer;
-            var query = from r in this.Roles
+            var comparer = Comparer;
+            var query = from r in Roles
                         where roleNames.Contains(r.Name, comparer)
                         select r;
-            lock (SyncRoot) {
-                foreach (XmlRole role in query) {
-                    foreach (string username in usernames) {
+            lock (SyncRoot)
+            {
+                foreach (XmlRole role in query)
+                {
+                    foreach (string username in usernames)
+                    {
                         role.Users.Remove(username);
                     }
                 }
-                this.Store.Save();
+                Store.Save();
             }
         }
 
@@ -294,8 +296,9 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// true if the role name already exists in the data source for the configured applicationName; otherwise, false.
         /// </returns>
-        public override bool RoleExists(string roleName) {
-            return this.GetRole(roleName) != null;
+        public override bool RoleExists(string roleName)
+        {
+            return GetRole(roleName) != null;
         }
 
         #region - Initialize -
@@ -308,16 +311,17 @@ namespace Velyo.Web.Security {
         /// <exception cref="T:System.ArgumentNullException">The name of the provider is null.</exception>
         /// <exception cref="T:System.InvalidOperationException">An attempt is made to call <see cref="M:System.Configuration.Provider.ProviderBase.Initialize(System.String,System.Collections.Specialized.NameValueCollection)"></see> on a provider after the provider has already been initialized.</exception>
         /// <exception cref="T:System.ArgumentException">The name of the provider has a length of zero.</exception>
-        public override void Initialize(string name, NameValueCollection config) {
-
-            if (config == null)
-                throw new ArgumentNullException("config");
+        public override void Initialize(string name, NameValueCollection config)
+        {
+            if (config == null) throw new ArgumentNullException(nameof(config));
 
             // prerequisite
-            if (string.IsNullOrWhiteSpace(name)) {
+            if (string.IsNullOrWhiteSpace(name))
+            {
                 name = "XmlRoleProvider";
             }
-            if (string.IsNullOrEmpty(config["description"])) {
+            if (string.IsNullOrEmpty(config["description"]))
+            {
                 config.Remove("description");
                 config.Add("description", "XML Role Provider");
             }
@@ -332,7 +336,6 @@ namespace Velyo.Web.Security {
             if (!folder.EndsWith("/")) folder += "/";
             _file = HostingEnvironment.MapPath(string.Format("{0}{1}", folder, fileName));
         }
-        #endregion
         #endregion
     }
 }

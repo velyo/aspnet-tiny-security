@@ -7,7 +7,7 @@ namespace Velyo.Web.Security.Store {
     /// <summary>
     /// TODO change XmlUserStore Delete to remove the associated ICard, if any.
     /// </summary>
-    public class XmlICardStore : Persistable<List<XmlICard>> {
+    public class XmlICardStore : XmlStore<List<XmlICard>> {
 
         #region Properties  /////////////////////////////////////////////////////////////
 

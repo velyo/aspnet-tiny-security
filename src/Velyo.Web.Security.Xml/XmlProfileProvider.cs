@@ -8,59 +8,45 @@ using System.Web.Hosting;
 using System.Web.Profile;
 using Velyo.Web.Security.Store;
 
-namespace Velyo.Web.Security {
-
+namespace Velyo.Web.Security
+{
     /// <summary>
     /// Summary description for XmlProfileProvider
     /// TODO: implement some of the methods with respect of ProfileAuthenticationOption and result paging
     /// </summary>
-    public class XmlProfileProvider : ProfileProviderBase, IDisposable {
-
-        #region Fields  ///////////////////////////////////////////////////////////////////////////
-
-        string _file;
+    public class XmlProfileProvider : ProfileProviderBase, IDisposable
+    {
+        private string _file;
         private XmlProfileStore _store;
 
-        #endregion
-
-        #region Properties  ///////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Gets the profiles.
         /// </summary>
         /// <value>The profiles.</value>
-        private List<XmlProfile> Profiles { get { return this.Store.Profiles; } }
+        private List<XmlProfile> Profiles { get { return Store.Profiles; } }
 
         /// <summary>
         /// Gets the profiles store.
         /// </summary>
         /// <value>The store.</value>
-        protected XmlProfileStore Store {
+        protected XmlProfileStore Store
+        {
             get { return _store ?? (_store = new XmlProfileStore(_file)); }
-        }
-
-        #endregion
-
-        #region Construct  ////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlProfileProvider"/> class.
-        /// </summary>
-        public XmlProfileProvider() {
         }
 
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose() {
-            Store.Dispose();
+        public void Dispose()
+        {
+            if (_store != null)
+            {
+                _store.Dispose();
+                _store = null;
+            }
         }
-
-
-        #endregion
-
-        #region Methods ///////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// When overridden in a derived class, deletes all user-profile data for profiles in which the last activity date occurred before the specified date.
@@ -70,24 +56,24 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// The number of profiles deleted from the data source.
         /// </returns>
-        public override int DeleteInactiveProfiles(
-            ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate) {
-
+        public override int DeleteInactiveProfiles(ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate)
+        {
             int count;
-
-            var query = from p in this.Profiles
+            var query = from p in Profiles
                         where (p.LastUpdated <= userInactiveSinceDate)
                         select p;
 
-            if (authenticationOption != ProfileAuthenticationOption.All) {
+            if (authenticationOption != ProfileAuthenticationOption.All)
+            {
                 bool authenticated = (authenticationOption == ProfileAuthenticationOption.Authenticated);
                 query = query.Where(p => p.Authenticated == authenticated);
             }
 
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 var profilesToDelete = query.ToArray();
-                count = profilesToDelete.Count(p => this.Profiles.Remove(p));
-                this.Store.Save();
+                count = profilesToDelete.Count(p => Profiles.Remove(p));
+                Store.Save();
             }
 
             return count;
@@ -100,21 +86,20 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// The number of profiles deleted from the data source.
         /// </returns>
-        public override int DeleteProfiles(string[] usernames) {
-
-            if (usernames == null)
-                throw new ArgumentNullException("usernames");
+        public override int DeleteProfiles(string[] usernames)
+        {
+            if (usernames == null) throw new ArgumentNullException(nameof(usernames));
 
             int count;
-
-            var query = from p in this.Profiles
-                        where usernames.Contains(p.UserName, this.Comparer)
+            var query = from p in Profiles
+                        where usernames.Contains(p.UserName, Comparer)
                         select p;
 
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 var profilesToDelete = query.ToArray();
-                count = profilesToDelete.Count(p => this.Profiles.Remove(p));
-                this.Store.Save();
+                count = profilesToDelete.Count(p => Profiles.Remove(p));
+                Store.Save();
             }
 
             return count;
@@ -127,13 +112,12 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// The number of profiles deleted from the data source.
         /// </returns>
-        public override int DeleteProfiles(ProfileInfoCollection profiles) {
-
-            if (profiles == null)
-                throw new ArgumentNullException("profiles");
+        public override int DeleteProfiles(ProfileInfoCollection profiles)
+        {
+            if (profiles == null) throw new ArgumentNullException(nameof(profiles));
 
             IEnumerable<string> profilesToDelete = profiles.Cast<ProfileInfo>().Select(p => p.UserName);
-            return this.DeleteProfiles(profilesToDelete.ToArray());
+            return DeleteProfiles(profilesToDelete.ToArray());
         }
 
         /// <summary>
@@ -154,22 +138,24 @@ namespace Velyo.Web.Security {
             DateTime userInactiveSinceDate,
             int pageIndex,
             int pageSize,
-            out int totalRecords) {
-
+            out int totalRecords)
+        {
             XmlProfile[] profiles;
             int pageOffset = pageIndex * pageSize;
 
-            var query = from p in this.Profiles
+            var query = from p in Profiles
                         where (p.LastUpdated <= userInactiveSinceDate) &&
-                            (p.UserName.IndexOf(usernameToMatch, this.Comparison) >= 0)
+                            (p.UserName.IndexOf(usernameToMatch, Comparison) >= 0)
                         select p;
 
-            if (authenticationOption != ProfileAuthenticationOption.All) {
+            if (authenticationOption != ProfileAuthenticationOption.All)
+            {
                 bool authenticated = (authenticationOption == ProfileAuthenticationOption.Authenticated);
                 query = query.Where(p => p.Authenticated == authenticated);
             }
 
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 var results = query.ToArray();
                 totalRecords = results.Length;
                 profiles = results.Skip(pageOffset).Take(pageSize).ToArray();
@@ -194,21 +180,23 @@ namespace Velyo.Web.Security {
             string usernameToMatch,
             int pageIndex,
             int pageSize,
-            out int totalRecords) {
-
+            out int totalRecords)
+        {
             XmlProfile[] profiles;
             int pageOffset = pageIndex * pageSize;
 
-            var query = from p in this.Profiles
-                        where (p.UserName.IndexOf(usernameToMatch, this.Comparison) >= 0)
+            var query = from p in Profiles
+                        where (p.UserName.IndexOf(usernameToMatch, Comparison) >= 0)
                         select p;
 
-            if (authenticationOption != ProfileAuthenticationOption.All) {
+            if (authenticationOption != ProfileAuthenticationOption.All)
+            {
                 bool authenticated = (authenticationOption == ProfileAuthenticationOption.Authenticated);
                 query = query.Where(p => p.Authenticated == authenticated);
             }
 
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 var queryResults = query.ToArray();
                 totalRecords = queryResults.Length;
                 profiles = queryResults.Skip(pageOffset).Take(pageSize).ToArray();
@@ -233,21 +221,23 @@ namespace Velyo.Web.Security {
             DateTime userInactiveSinceDate,
             int pageIndex,
             int pageSize,
-            out int totalRecords) {
-
+            out int totalRecords)
+        {
             XmlProfile[] profiles;
             int pageOffset = pageIndex * pageSize;
 
-            var query = from p in this.Profiles
+            var query = from p in Profiles
                         where (p.LastUpdated <= userInactiveSinceDate)
                         select p;
 
-            if (authenticationOption != ProfileAuthenticationOption.All) {
+            if (authenticationOption != ProfileAuthenticationOption.All)
+            {
                 bool authenticated = (authenticationOption == ProfileAuthenticationOption.Authenticated);
                 query = query.Where(p => p.Authenticated == authenticated);
             }
 
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 var queryResults = query.ToArray();
                 totalRecords = queryResults.Length;
                 profiles = queryResults.Skip(pageOffset).Take(pageSize).ToArray();
@@ -270,19 +260,21 @@ namespace Velyo.Web.Security {
             ProfileAuthenticationOption authenticationOption,
             int pageIndex,
             int pageSize,
-            out int totalRecords) {
-
+            out int totalRecords)
+        {
             XmlProfile[] profiles;
             int pageOffset = pageIndex * pageSize;
 
-            IEnumerable<XmlProfile> query = this.Profiles;
+            IEnumerable<XmlProfile> query = Profiles;
 
-            if (authenticationOption != ProfileAuthenticationOption.All) {
+            if (authenticationOption != ProfileAuthenticationOption.All)
+            {
                 bool authenticated = (authenticationOption == ProfileAuthenticationOption.Authenticated);
                 query = query.Where(p => p.Authenticated == authenticated);
             }
 
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 var queryResilts = query.ToArray();
                 totalRecords = queryResilts.Length;
                 profiles = queryResilts.Skip(pageOffset).Take(pageSize).ToArray();
@@ -299,18 +291,20 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// The number of profiles in which the last activity date occurred on or before the specified date.
         /// </returns>
-        public override int GetNumberOfInactiveProfiles(ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate) {
-
-            var query = from p in this.Profiles
+        public override int GetNumberOfInactiveProfiles(ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate)
+        {
+            var query = from p in Profiles
                         where (p.LastUpdated <= userInactiveSinceDate)
                         select p;
 
-            if (authenticationOption != ProfileAuthenticationOption.All) {
+            if (authenticationOption != ProfileAuthenticationOption.All)
+            {
                 bool authenticated = (authenticationOption == ProfileAuthenticationOption.Authenticated);
                 query = query.Where(p => p.Authenticated == authenticated);
             }
 
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 return query.Count();
             }
         }
@@ -323,29 +317,35 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// A <see cref="T:System.Configuration.SettingsPropertyValueCollection"/> containing the values for the specified settings property group.
         /// </returns>
-        public override SettingsPropertyValueCollection GetPropertyValues(
-            SettingsContext context, SettingsPropertyCollection collection) {
-
+        public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection)
+        {
             SettingsPropertyValueCollection coll = new SettingsPropertyValueCollection();
 
-            if (collection.Count > 0) {
+            if (collection.Count > 0)
+            {
                 string username = context["UserName"] as string;
-                if (!string.IsNullOrEmpty(username)) {
-                    XmlProfile profile = this.GetProfile(username);
+                if (!string.IsNullOrEmpty(username))
+                {
+                    XmlProfile profile = GetProfile(username);
 
-                    foreach (SettingsProperty prop in collection) {
-                        if (prop.SerializeAs == SettingsSerializeAs.ProviderSpecific) {
-                            if (prop.PropertyType.IsPrimitive || (prop.PropertyType == typeof(string))) {
+                    foreach (SettingsProperty prop in collection)
+                    {
+                        if (prop.SerializeAs == SettingsSerializeAs.ProviderSpecific)
+                        {
+                            if (prop.PropertyType.IsPrimitive || (prop.PropertyType == typeof(string)))
+                            {
                                 prop.SerializeAs = SettingsSerializeAs.String;
                             }
-                            else {
+                            else
+                            {
                                 prop.SerializeAs = SettingsSerializeAs.Xml;
                             }
                         }
                         coll.Add(new SettingsPropertyValue(prop));
                     }
 
-                    if (profile != null) {
+                    if (profile != null)
+                    {
                         GetPropertyValues(profile.Names, profile.ValuesString, profile.ValuesBinary, coll);
                     }
                 }
@@ -359,14 +359,15 @@ namespace Velyo.Web.Security {
         /// </summary>
         /// <param name="context">A <see cref="T:System.Configuration.SettingsContext"/> describing the current application usage.</param>
         /// <param name="collection">A <see cref="T:System.Configuration.SettingsPropertyValueCollection"/> representing the group of property settings to set.</param>
-        public override void SetPropertyValues(
-            SettingsContext context, SettingsPropertyValueCollection collection) {
-
-            if (collection.Count > 0) {
+        public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection collection)
+        {
+            if (collection.Count > 0)
+            {
                 string username = context["UserName"] as string;
 
                 // TODO ensure username for anonymous users is not null
-                if (!string.IsNullOrEmpty(username)) {
+                if (!string.IsNullOrEmpty(username))
+                {
                     string names = string.Empty;
                     string valuesString = string.Empty;
                     byte[] valuesBinary = null;
@@ -376,15 +377,18 @@ namespace Velyo.Web.Security {
                     PrepareDataForSaving(ref names, ref valuesString, ref valuesBinary, true, collection, isAuthenticated);
 
                     // save data
-                    if (!string.IsNullOrWhiteSpace(valuesString) || valuesBinary != null) {
+                    if (!string.IsNullOrWhiteSpace(valuesString) || valuesBinary != null)
+                    {
                         Encoding encoding = Encoding.UTF8;
 
-                        lock (SyncRoot) {
-                            XmlProfile profile = this.GetProfile(username);
+                        lock (SyncRoot)
+                        {
+                            XmlProfile profile = GetProfile(username);
 
-                            if (profile == null) {
+                            if (profile == null)
+                            {
                                 profile = new XmlProfile { UserName = username };
-                                this.Profiles.Add(profile);
+                                Profiles.Add(profile);
                             }
 
                             profile.Names = Convert.ToBase64String(encoding.GetBytes(names));
@@ -393,7 +397,7 @@ namespace Velyo.Web.Security {
                             profile.LastUpdated = DateTime.Now;
                             profile.Authenticated = isAuthenticated;
 
-                            this.Store.Save();
+                            Store.Save();
                         }
                     }
                 }
@@ -407,11 +411,12 @@ namespace Velyo.Web.Security {
         /// </summary>
         /// <param name="profiles">The profiles.</param>
         /// <returns></returns>
-        protected internal ProfileInfoCollection CreateProfileInfoCollection(IEnumerable<XmlProfile> profiles) {
-
+        protected internal ProfileInfoCollection CreateProfileInfoCollection(IEnumerable<XmlProfile> profiles)
+        {
             ProfileInfoCollection collection = new ProfileInfoCollection();
 
-            foreach (var p in profiles) {
+            foreach (var p in profiles)
+            {
                 int size = p.Names.Length + p.ValuesString.Length + p.ValuesBinary.Length;
                 collection.Add(new ProfileInfo(
                     p.UserName, !p.Authenticated, p.LastUpdated, p.LastUpdated, size));
@@ -425,12 +430,14 @@ namespace Velyo.Web.Security {
         /// </summary>
         /// <param name="username">The username.</param>
         /// <returns></returns>
-        protected XmlProfile GetProfile(string username) {
-            var query = from p in this.Profiles
-                        where p.UserName.Equals(username, this.Comparison)
+        protected XmlProfile GetProfile(string username)
+        {
+            var query = from p in Profiles
+                        where p.UserName.Equals(username, Comparison)
                         select p;
 
-            lock (SyncRoot) {
+            lock (SyncRoot)
+            {
                 return query.SingleOrDefault();
             }
         }
@@ -447,16 +454,17 @@ namespace Velyo.Web.Security {
         /// <exception cref="T:System.ArgumentNullException">The name of the provider is null.</exception>
         /// <exception cref="T:System.ArgumentException">The name of the provider has a length of zero.</exception>
         /// <exception cref="T:System.InvalidOperationException">An attempt is made to call <see cref="M:System.Configuration.Provider.ProviderBase.Initialize(System.String,System.Collections.Specialized.NameValueCollection)"/> on a provider after the provider has already been initialized.</exception>
-        public override void Initialize(string name, NameValueCollection config) {
-
-            if (config == null)
-                throw new ArgumentNullException("config");
+        public override void Initialize(string name, NameValueCollection config)
+        {
+            if (config == null) throw new ArgumentNullException(nameof(config));
 
             // prerequisites
-            if (string.IsNullOrEmpty(name)) {
+            if (string.IsNullOrEmpty(name))
+            {
                 name = "XmlProfileProvider";
             }
-            if (string.IsNullOrEmpty(config["description"])) {
+            if (string.IsNullOrEmpty(config["description"]))
+            {
                 config.Remove("description");
                 config.Add("description", "XML Profile Provider");
             }
@@ -471,7 +479,6 @@ namespace Velyo.Web.Security {
             if (!folder.EndsWith("/")) folder += "/";
             _file = HostingEnvironment.MapPath(string.Format("{0}{1}", folder, fileName));
         }
-        #endregion
         #endregion
     }
 }

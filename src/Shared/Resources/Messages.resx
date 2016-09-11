@@ -117,11 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CannotDecodeHashedPassword" xml:space="preserve">
+    <value>MembershipProvider cannot decode hashed password.</value>
+  </data>
   <data name="CannotDeletePopulatedRole" xml:space="preserve">
     <value>Cannot delete a populated role.</value>
   </data>
+  <data name="DisabledPasswordReset" xml:space="preserve">
+    <value>Password reset is not enabled.</value>
+  </data>
+  <data name="DisabledPasswordRetrieval" xml:space="preserve">
+    <value>Password retrieval is not enabled.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>The new password is not valid according to the provider settings.</value>
+  </data>
   <data name="LoadFailed" xml:space="preserve">
     <value>Fail to load persitable object from file {0}.</value>
+  </data>
+  <data name="RequiredPasswordQuestionAndAnswer" xml:space="preserve">
+    <value>Password question and answer are required.</value>
   </data>
   <data name="RoleCannotContainCommas" xml:space="preserve">
     <value>Role name cannot contain commas.</value>
@@ -134,5 +149,8 @@
   </data>
   <data name="SaveFailed" xml:space="preserve">
     <value>Fail to save persitable object to file {0}.</value>
+  </data>
+  <data name="UnknownPasswordFormat" xml:space="preserve">
+    <value>Unknown password format detected.</value>
   </data>
 </root>

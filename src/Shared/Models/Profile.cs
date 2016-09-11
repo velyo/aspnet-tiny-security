@@ -2,6 +2,7 @@
 
 namespace Velyo.Web.Security.Models
 {
+    [Serializable]
     public class Profile
     {
         public string UserName { get; set; }

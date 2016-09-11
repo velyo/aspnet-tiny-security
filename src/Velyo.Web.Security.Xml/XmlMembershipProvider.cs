@@ -2,74 +2,47 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration.Provider;
-using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Web;
 using System.Web.Hosting;
-using System.Web.Security;
-using System.Web.UI;
-using Velyo.Web.Security.Store;
 using System.Web.Profile;
+using System.Web.Security;
+using Velyo.Web.Security.Store;
 
-namespace Velyo.Web.Security {
-
+namespace Velyo.Web.Security
+{
     /// <summary>
     /// Specialized MembershipProvider that uses a file (Users.config) to store its data.
     /// Passwords for the users are always stored as a salted hash (see: http://msdn.microsoft.com/msdnmag/issues/03/08/SecurityBriefs/)
     /// </summary>
-    public class XmlMembershipProvider : MembershipProviderBase, IDisposable {
+    public class XmlMembershipProvider : MembershipProviderBase, IDisposable
+    {
+        private string _file;
+        private WeakReference _storeRef;
 
-        #region Static Methods ////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Setups the specified saved state.
-        /// </summary>
-        /// <param name="savedState">State of the saved.</param>
-        static void SetupInitialUser(string role, string user, string password) {
-
-            if (Roles.Enabled) {
-                if (!Roles.RoleExists(role)) Roles.CreateRole(role);
-                Membership.CreateUser(user, password);
-                Roles.AddUserToRole(user, role);
-            }
-        }
-        #endregion
-
-        #region Fields  ///////////////////////////////////////////////////////////////////////////
-
-        bool _disposed;
-        string _file;
-        WeakReference _storeRef;
-
-        #endregion
-
-        #region Properties  ///////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="XmlMembershipProvider"/> is disposed.
+        /// Releases unmanaged resources and performs other cleanup operations before the
+        /// <see cref="XmlMembershipProvider"/> is reclaimed by garbage collection.
         /// </summary>
-        /// <value><c>true</c> if disposed; otherwise, <c>false</c>.</value>
-        protected bool Disposed {
-            get {
-                lock (this) {
-                    return _disposed;
-                }
-            }
+        ~XmlMembershipProvider()
+        {
+            Dispose(false);
         }
+
 
         /// <summary>
         /// Gets the store.
         /// </summary>
         /// <value>The store.</value>
-        protected XmlUserStore Store {
-            get {
-                XmlUserStore store = this.StoreRef.Target as XmlUserStore;
-                if (store == null) {
-                    this.StoreRef.Target = store = new XmlUserStore(_file);
+        protected XmlUserStore Store
+        {
+            get
+            {
+                XmlUserStore store = StoreRef.Target as XmlUserStore;
+                if (store == null)
+                {
+                    StoreRef.Target = store = new XmlUserStore(_file);
                 }
                 return store;
             }
@@ -79,10 +52,11 @@ namespace Velyo.Web.Security {
         /// Gets the store ref.
         /// </summary>
         /// <value>The store ref.</value>
-        private WeakReference StoreRef {
-            get {
-                return _storeRef ??
-                        (_storeRef = new WeakReference(new XmlUserStore(_file)));
+        private WeakReference StoreRef
+        {
+            get
+            {
+                return _storeRef ?? (_storeRef = new WeakReference(new XmlUserStore(_file)));
             }
         }
 
@@ -90,24 +64,28 @@ namespace Velyo.Web.Security {
         /// Gets the users.
         /// </summary>
         /// <value>The users.</value>
-        public List<XmlUser> Users { get { return this.Store.Users; } }
+        public List<XmlUser> Users { get { return Store.Users; } }
 
-        #endregion
-
-        #region Construct / Destruct //////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Releases unmanaged resources and performs other cleanup operations before the
-        /// <see cref="XmlMembershipProvider"/> is reclaimed by garbage collection.
+        /// Setups the specified saved state.
         /// </summary>
-        ~XmlMembershipProvider() {
-            Dispose(false);
+        /// <param name="savedState">State of the saved.</param>
+        private static void SetupInitialUser(string role, string user, string password)
+        {
+            if (Roles.Enabled)
+            {
+                if (!Roles.RoleExists(role)) Roles.CreateRole(role);
+                Membership.CreateUser(user, password);
+                Roles.AddUserToRole(user, role);
+            }
         }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -116,27 +94,20 @@ namespace Velyo.Web.Security {
         /// Releases unmanaged and - optionally - managed resources
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing) {
-
-            lock (this) {
-                if (!_disposed) {
-                    _disposed = true;
-                    if (disposing) {
-                        if (_storeRef != null) {
-                            var store = _storeRef.Target as XmlUserStore;
-                            if (store != null) store.Dispose();
-                            _storeRef.Target = store = null;
-                            _storeRef = null;
-                        }
-                        _file = null;
-                    }
-                    // release unmanaged resources
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_storeRef != null)
+                {
+                    var store = _storeRef.Target as XmlUserStore;
+                    if (store != null) store.Dispose();
+                    _storeRef.Target = store = null;
+                    _storeRef = null;
                 }
+                _file = null;
             }
         }
-        #endregion
-
-        #region Methods ///////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Adds a new membership user to the data source.
@@ -161,23 +132,25 @@ namespace Velyo.Web.Security {
             string passwordAnswer,
             bool isApproved,
             object providerUserKey,
-            out MembershipCreateStatus status) {
+            out MembershipCreateStatus status)
+        {
+            if (username == null) throw new ArgumentNullException(nameof(username));
 
-            if (username == null)
-                throw new ArgumentNullException("username");
-
-            try {
-                bool valid = this.VerifyUserIsValid(
+            try
+            {
+                bool valid = VerifyUserIsValid(
                     providerUserKey, username, password, email, passwordQuestion, passwordAnswer, out status);
 
-                if (valid) {
+                if (valid)
+                {
                     // user date is valid then create
-                    DateTime now = this.UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
+                    DateTime now = UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
                     string salt = string.Empty;
-                    string encodedPassword = this.EncodePassword(password, ref salt);
+                    string encodedPassword = EncodePassword(password, ref salt);
 
                     var userKey = (providerUserKey != null) ? (Guid)providerUserKey : Guid.NewGuid();
-                    XmlUser user = new XmlUser {
+                    XmlUser user = new XmlUser
+                    {
                         UserKey = userKey,
                         UserName = username,
                         PasswordSalt = salt,
@@ -191,19 +164,22 @@ namespace Velyo.Web.Security {
                         LastPasswordChangeDate = now
                     };
 
-                    lock (SyncRoot) {
+                    lock (SyncRoot)
+                    {
                         // Add the user to the store
-                        this.Store.Users.Add(user);
-                        this.Store.Save();
+                        Store.Users.Add(user);
+                        Store.Save();
                     }
 
                     return CreateMembershipFromInternalUser(user);
                 }
-                else {
+                else
+                {
                     return null;
                 }
             }
-            catch {
+            catch
+            {
                 throw;
             }
         }
@@ -217,38 +193,40 @@ namespace Velyo.Web.Security {
         /// true if the user was successfully deleted; otherwise, false.
         /// </returns>
         /// <exception cref="T:System.ArgumentNullException">Thrown when username is <c>null</c></exception>
-        public override bool DeleteUser(string username, bool deleteAllRelatedData) {
+        public override bool DeleteUser(string username, bool deleteAllRelatedData)
+        {
+            if (username == null) throw new ArgumentNullException(nameof(username));
 
-            if (username == null)
-                throw new ArgumentNullException("username");
-
-            bool deleted = false;
-
-            try {
-                if (deleteAllRelatedData) {
+            try
+            {
+                if (deleteAllRelatedData)
+                {
                     // remove user from roles
                     string[] roles = Roles.GetRolesForUser(username);
                     if ((roles != null) && (roles.Length > 0))
+                    {
                         Roles.RemoveUsersFromRoles(new string[] { username }, roles);
+                    }
                     // delete user profile
                     ProfileManager.DeleteProfile(username);
                 }
 
-                lock (SyncRoot) {
-                    XmlUser user = this.GetInternalUser(username);
-                    if (user != null) {
-                        this.Store.Users.Remove(user);
-                        this.Store.Save();
+                lock (SyncRoot)
+                {
+                    XmlUser user = GetInternalUser(username);
+                    if (user != null)
+                    {
+                        Store.Users.Remove(user);
+                        Store.Save();
                     }
                 }
 
-                deleted = true;
+                return true;
             }
-            catch {
+            catch
+            {
                 throw;
             }
-
-            return deleted;
         }
 
         /// <summary>
@@ -262,29 +240,31 @@ namespace Velyo.Web.Security {
         /// A <see cref="T:System.Web.Security.MembershipUserCollection"></see> collection that contains a page of pageSize<see cref="T:System.Web.Security.MembershipUser"></see> objects beginning at the page specified by pageIndex.
         /// </returns>
         /// <exception cref="T:System.ArgumentNullException">Thrown when emailToMatch is <c>null</c></exception>
-        public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords) {
-
-            if (emailToMatch == null)
-                throw new ArgumentNullException("emailToMatch");
+        public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
+        {
+            if (emailToMatch == null) throw new ArgumentNullException(nameof(emailToMatch));
 
             XmlUser[] users;
             int pageOffset = pageIndex * pageSize;
 
-            try {
-                var comparison = this.Comparison;
-                var query = from u in this.Users
+            try
+            {
+                var comparison = Comparison;
+                var query = from u in Users
                             let email = u.Email
                             where ((email != null) && (email.IndexOf(emailToMatch, comparison) >= 0))
                             select u;
 
-                lock (SyncRoot) {
+                lock (SyncRoot)
+                {
                     totalRecords = query.Count();
                     users = query.Skip(pageOffset).Take(pageSize).ToArray();
                 }
 
                 return CreateMembershipCollectionFromInternalList(users);
             }
-            catch {
+            catch
+            {
                 throw;
             }
         }
@@ -300,29 +280,31 @@ namespace Velyo.Web.Security {
         /// A <see cref="T:System.Web.Security.MembershipUserCollection"></see> collection that contains a page of pageSize<see cref="T:System.Web.Security.MembershipUser"></see> objects beginning at the page specified by pageIndex.
         /// </returns>
         /// <exception cref="T:System.ArgumentNullException">Thrown when usernameToMatch is <c>null</c></exception>
-        public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords) {
-
-            if (usernameToMatch == null)
-                throw new ArgumentNullException("usernameToMatch");
+        public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
+        {
+            if (usernameToMatch == null) throw new ArgumentNullException(nameof(usernameToMatch));
 
             int pageOffset = pageIndex * pageSize;
             XmlUser[] users;
 
-            try {
-                var comparison = this.Comparison;
-                var query = from u in this.Users
+            try
+            {
+                var comparison = Comparison;
+                var query = from u in Users
                             let name = u.UserName
                             where (name.IndexOf(usernameToMatch, comparison) >= 0)
                             select u;
 
-                lock (SyncRoot) {
+                lock (SyncRoot)
+                {
                     totalRecords = query.Count();
                     users = query.Skip(pageOffset).Take(pageSize).ToArray();
                 }
 
                 return CreateMembershipCollectionFromInternalList(users);
             }
-            catch {
+            catch
+            {
                 throw;
             }
         }
@@ -336,20 +318,23 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// A <see cref="T:System.Web.Security.MembershipUserCollection"></see> collection that contains a page of pageSize<see cref="T:System.Web.Security.MembershipUser"></see> objects beginning at the page specified by pageIndex.
         /// </returns>
-        public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords) {
-
+        public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
+        {
             int pageOffset = pageIndex * pageSize;
             XmlUser[] users;
 
-            try {
-                lock (SyncRoot) {
-                    totalRecords = this.Users.Count;
-                    users = this.Users.Skip(pageOffset).Take(pageSize).ToArray();
+            try
+            {
+                lock (SyncRoot)
+                {
+                    totalRecords = Users.Count;
+                    users = Users.Skip(pageOffset).Take(pageSize).ToArray();
                 }
 
                 return CreateMembershipCollectionFromInternalList(users);
             }
-            catch {
+            catch
+            {
                 throw;
             }
         }
@@ -360,22 +345,25 @@ namespace Velyo.Web.Security {
         /// <returns>
         /// The number of users currently accessing the application.
         /// </returns>
-        public override int GetNumberOfUsersOnline() {
-
+        public override int GetNumberOfUsersOnline()
+        {
             int count = 0;
             int onlineTime = Membership.UserIsOnlineTimeWindow;
-            DateTime now = this.UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
+            DateTime now = UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
 
-            try {
-                var query = from u in this.Users
+            try
+            {
+                var query = from u in Users
                             where (u.LastActivityDate.AddMinutes(onlineTime) >= now)
                             select u;
 
-                lock (SyncRoot) {
+                lock (SyncRoot)
+                {
                     count = query.Count();
                 }
             }
-            catch {
+            catch
+            {
                 throw;
             }
 
@@ -391,25 +379,28 @@ namespace Velyo.Web.Security {
         /// A <see cref="T:System.Web.Security.MembershipUser"></see> object populated with the specified user's information from the data source.
         /// </returns>
         /// <exception cref="T:System.ArgumentNullException">Thrown when username is <c>null</c></exception>
-        public override MembershipUser GetUser(string username, bool userIsOnline) {
-
-            if (username == null)
-                throw new ArgumentNullException("username");
+        public override MembershipUser GetUser(string username, bool userIsOnline)
+        {
+            if (username == null) throw new ArgumentNullException(nameof(username));
 
             XmlUser user;
 
-            try {
-                lock (SyncRoot) {
-                    user = this.GetInternalUser(username);
-                    if ((user != null) && (userIsOnline)) {
-                        user.LastActivityDate = this.UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
-                        this.Store.Save();
+            try
+            {
+                lock (SyncRoot)
+                {
+                    user = GetInternalUser(username);
+                    if ((user != null) && (userIsOnline))
+                    {
+                        user.LastActivityDate = UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
+                        Store.Save();
                     }
                 }
 
                 return CreateMembershipFromInternalUser(user);
             }
-            catch {
+            catch
+            {
                 throw;
             }
         }
@@ -424,32 +415,34 @@ namespace Velyo.Web.Security {
         /// </returns>
         /// <exception cref="T:System.ArgumentNullException">Thrown when providerUserKey is <c>null</c></exception>
         /// <exception cref="T:System.ArgumentException">Thrown when providerUserKey is not a <see cref="T:System.Guid"></see></exception>
-        public override MembershipUser GetUser(object providerUserKey, bool userIsOnline) {
-
-            if (providerUserKey == null)
-                throw new ArgumentNullException("providerUserKey");
-            if (!(providerUserKey is Guid))
-                throw new ArgumentException("Invalid provider user key. Must be a Guid.");
+        public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
+        {
+            if (providerUserKey == null) throw new ArgumentNullException(nameof(providerUserKey));
+            if (!(providerUserKey is Guid)) throw new ArgumentException("Invalid provider user key. Must be a Guid.");
 
             XmlUser user;
             Guid key = (Guid)providerUserKey;
 
-            try {
-                var query = from u in this.Users
+            try
+            {
+                var query = from u in Users
                             where (u.UserKey == key)
                             select u;
 
-                lock (SyncRoot) {
+                lock (SyncRoot)
+                {
                     user = query.FirstOrDefault();
-                    if ((user != null) && (userIsOnline)) {
+                    if ((user != null) && (userIsOnline))
+                    {
                         user.LastActivityDate = DateTime.Now;
-                        this.Store.Save();
+                        Store.Save();
                     }
                 }
 
                 return CreateMembershipFromInternalUser(user);
             }
-            catch {
+            catch
+            {
                 throw;
             }
         }
@@ -462,28 +455,30 @@ namespace Velyo.Web.Security {
         /// The user name associated with the specified e-mail address. If no match is found, return null.
         /// </returns>
         /// <exception cref="T:System.ArgumentNullException">Thrown when email is <c>null</c></exception>
-        public override string GetUserNameByEmail(string email) {
-
-            if (email == null)
-                throw new ArgumentNullException("email");
+        public override string GetUserNameByEmail(string email)
+        {
+            if (email == null) throw new ArgumentNullException(nameof(email));
 
             XmlUser user;
 
-            try {
-                var comparison = this.Comparison;
-                var query = from u in this.Users
+            try
+            {
+                var comparison = Comparison;
+                var query = from u in Users
                             where u.Email.Equals(email, comparison)
                             select u;
 
-                lock (SyncRoot) {
-                    if (this.RequiresUniqueEmail && (query.Count() > 1))
+                lock (SyncRoot)
+                {
+                    if (RequiresUniqueEmail && (query.Count() > 1))
                         throw new ProviderException("More than one user with same email found.");
                     user = query.FirstOrDefault();
                 }
 
                 return (user != null) ? user.UserName : null;
             }
-            catch {
+            catch
+            {
                 throw;
             }
         }
@@ -496,24 +491,27 @@ namespace Velyo.Web.Security {
         /// true if the membership user was successfully unlocked; otherwise, false.
         /// </returns>
         /// <exception cref="T:System.ArgumentNullException">Thrown when username is <c>null</c></exception>
-        public override bool UnlockUser(string username) {
-
-            if (username == null)
-                throw new ArgumentNullException("username");
+        public override bool UnlockUser(string username)
+        {
+            if (username == null) throw new ArgumentNullException(nameof(username));
 
             bool unlocked = false;
 
-            try {
-                lock (SyncRoot) {
-                    var user = this.GetInternalUser(username);
-                    if (user != null && user.IsLockedOut) {
+            try
+            {
+                lock (SyncRoot)
+                {
+                    var user = GetInternalUser(username);
+                    if (user != null && user.IsLockedOut)
+                    {
                         user.IsLockedOut = false;
                         user.FailedPasswordAttemptCount = 0;
-                        this.Store.Save();
+                        Store.Save();
                     }
                 }
             }
-            catch {
+            catch
+            {
                 throw;
             }
 
@@ -525,30 +523,35 @@ namespace Velyo.Web.Security {
         /// </summary>
         /// <param name="user">A <see cref="T:System.Web.Security.MembershipUser"></see> object that represents the user to update and the updated information for the user.</param>
         /// <exception cref="T:System.ArgumentNullException">Thrown when user is <c>null</c></exception>
-        public override void UpdateUser(MembershipUser user) {
-
-            if (user == null)
-                throw new ArgumentNullException("user");
+        public override void UpdateUser(MembershipUser user)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
 
             // TODO should we allow username to be changed as well
             //if (this.VerifyUserNameIsUnique(user.UserName, (Guid)user.ProviderUserKey))
             //    throw new ArgumentException("UserName is not unique!");
-            if (this.RequiresUniqueEmail && !this.VerifyEmailIsUnique(user.Email, (Guid)user.ProviderUserKey))
+            if (RequiresUniqueEmail && !VerifyEmailIsUnique(user.Email, (Guid)user.ProviderUserKey))
+            {
                 throw new ArgumentException("Email is not unique!");
+            }
 
-            lock (SyncRoot) {
-                var xuser = this.GetInternalUser(user.UserName);
+            lock (SyncRoot)
+            {
+                var xuser = GetInternalUser(user.UserName);
 
-                if (xuser != null) {
+                if (xuser != null)
+                {
                     xuser.Email = user.Email;
                     xuser.LastActivityDate = user.LastActivityDate;
                     xuser.LastLoginDate = user.LastLoginDate;
                     xuser.Comment = user.Comment;
                     xuser.IsApproved = user.IsApproved;
-                    this.Store.Save();
+                    Store.Save();
                 }
                 else
+                {
                     throw new ProviderException("User does not exist!");
+                }
             }
         }
 
@@ -559,10 +562,10 @@ namespace Velyo.Web.Security {
         /// </summary>
         /// <param name="user">The user.</param>
         /// <returns></returns>
-        private MembershipUser CreateMembershipFromInternalUser(XmlUser user) {
-
+        private MembershipUser CreateMembershipFromInternalUser(XmlUser user)
+        {
             return (user != null)
-                ? new MembershipUser(this.Name,
+                ? new MembershipUser(Name,
                     user.UserName, user.UserKey, user.Email, user.PasswordQuestion,
                     user.Comment, user.IsApproved, user.IsLockedOut, user.CreationDate, user.LastLoginDate,
                     user.LastActivityDate, user.LastPasswordChangeDate, user.LastLockoutDate)
@@ -574,12 +577,15 @@ namespace Velyo.Web.Security {
         /// </summary>
         /// <param name="users">The users.</param>
         /// <returns></returns>
-        private MembershipUserCollection CreateMembershipCollectionFromInternalList(IEnumerable<XmlUser> users) {
-
+        private MembershipUserCollection CreateMembershipCollectionFromInternalList(IEnumerable<XmlUser> users)
+        {
             MembershipUserCollection returnCollection = new MembershipUserCollection();
-            foreach (XmlUser user in users) {
+
+            foreach (XmlUser user in users)
+            {
                 returnCollection.Add(CreateMembershipFromInternalUser(user));
             }
+
             return returnCollection;
         }
 
@@ -588,10 +594,10 @@ namespace Velyo.Web.Security {
         /// </summary>
         /// <param name="username">The username.</param>
         /// <returns></returns>
-        private XmlUser GetInternalUser(string username) {
-
-            var comparison = this.Comparison;
-            var query = from u in this.Users
+        private XmlUser GetInternalUser(string username)
+        {
+            var comparison = Comparison;
+            var query = from u in Users
                         where u.UserName.Equals(username, comparison)
                         select u;
             return query.FirstOrDefault();
@@ -606,19 +612,21 @@ namespace Velyo.Web.Security {
         /// <param name="question"></param>
         /// <param name="answer">The answer.</param>
         /// <returns></returns>
-        protected override bool TryGetPassword(string username, out string password, out string salt, out string question, out string answer) {
-
-            XmlUser user;
-            lock (SyncRoot) {
-                user = this.GetInternalUser(username);
-                if (user != null) {
+        protected override bool TryGetPassword(string username, out string password, out string salt, out string question, out string answer)
+        {
+            lock (SyncRoot)
+            {
+                XmlUser user = GetInternalUser(username);
+                if (user != null)
+                {
                     password = user.Password;
                     salt = user.PasswordSalt;
                     question = user.PasswordQuestion;
                     answer = user.PasswordAnswer;
                     return true;
                 }
-                else {
+                else
+                {
                     password = salt = question = answer = null;
                     return false;
                 }
@@ -634,22 +642,25 @@ namespace Velyo.Web.Security {
         /// <param name="question"></param>
         /// <param name="answer">The answer.</param>
         /// <returns></returns>
-        protected override bool TrySetPassword(string username, string password, string salt, string question, string answer) {
-
-            XmlUser user;
-            lock (SyncRoot) {
-                user = this.GetInternalUser(username);
-                if (user != null) {
-                    user.LastPasswordChangeDate = this.UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
+        protected override bool TrySetPassword(string username, string password, string salt, string question, string answer)
+        {
+            lock (SyncRoot)
+            {
+                XmlUser user = GetInternalUser(username);
+                if (user != null)
+                {
+                    user.LastPasswordChangeDate = UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
                     user.Password = password;
                     user.PasswordSalt = salt;
                     user.PasswordQuestion = question;
                     user.PasswordAnswer = answer;
-                    this.Store.Save();
+                    Store.Save();
                     return true;
                 }
                 else
+                {
                     return false;
+                }
             }
         }
 
@@ -658,38 +669,43 @@ namespace Velyo.Web.Security {
         /// </summary>
         /// <param name="username"></param>
         /// <param name="valid">if set to <c>true</c> [valid].</param>
-        protected override void UpdateUserInfo(string username, bool valid) {
-
-            lock (SyncRoot) {
-                try {
-                    var user = this.GetInternalUser(username);
-                    if (user != null) {
-                        DateTime now = this.UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
+        protected override void UpdateUserInfo(string username, bool valid)
+        {
+            try
+            {
+                lock (SyncRoot)
+                {
+                    var user = GetInternalUser(username);
+                    if (user != null)
+                    {
+                        DateTime now = UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
 
                         user.LastActivityDate = now;
-                        if (valid) {
+                        if (valid)
+                        {
                             user.LastLoginDate = now;
                             user.FailedPasswordAttemptCount = 0;
                         }
-                        else {
+                        else
+                        {
                             user.FailedPasswordAttemptCount++;
-                            if (!user.IsLockedOut) {
-                                user.IsLockedOut = (user.FailedPasswordAttemptCount >= this.MaxInvalidPasswordAttempts);
+                            if (!user.IsLockedOut)
+                            {
+                                user.IsLockedOut = (user.FailedPasswordAttemptCount >= MaxInvalidPasswordAttempts);
                                 if (user.IsLockedOut)
                                     user.LastLockoutDate = now;
                             }
                         }
-                        this.Store.Save();
+                        Store.Save();
                     }
                 }
-                catch {
-                    throw;
-                }
+            }
+            catch
+            {
+                throw;
             }
         }
         #endregion
-
-        #region - Initialize -
 
         /// <summary>
         /// Initializes the provider.
@@ -699,16 +715,17 @@ namespace Velyo.Web.Security {
         /// <exception cref="T:System.ArgumentNullException">The name of the provider is null.</exception>
         /// <exception cref="T:System.InvalidOperationException">An attempt is made to call <see cref="M:System.Configuration.Provider.ProviderBase.Initialize(System.String,System.Collections.Specialized.NameValueCollection)"></see> on a provider after the provider has already been initialized.</exception>
         /// <exception cref="T:System.ArgumentException">The name of the provider has a length of zero.</exception>
-        public override void Initialize(string name, NameValueCollection config) {
-
-            if (config == null)
-                throw new ArgumentNullException("config");
+        public override void Initialize(string name, NameValueCollection config)
+        {
+            if (config == null) throw new ArgumentNullException(nameof(config));
 
             // prerequisites
-            if (string.IsNullOrEmpty(name)) {
+            if (string.IsNullOrEmpty(name))
+            {
                 name = "XmlMembershipProvider";
             }
-            if (string.IsNullOrEmpty(config["description"])) {
+            if (string.IsNullOrEmpty(config["description"]))
+            {
                 config.Remove("description");
                 config.Add("description", "XML Membership Provider");
             }
@@ -723,12 +740,11 @@ namespace Velyo.Web.Security {
             if (!folder.EndsWith("/")) folder += "/";
             _file = HostingEnvironment.MapPath(string.Format("{0}{1}", folder, fileName));
         }
-        #endregion
-        #endregion
     }
 
-    #region SaltedHash Class
-    public sealed class SaltedHash {
+    
+    public sealed class SaltedHash
+    {
         private readonly string _salt;
         private readonly string _hash;
         private const int saltLength = 6;
@@ -736,50 +752,58 @@ namespace Velyo.Web.Security {
         public string Salt { get { return _salt; } }
         public string Hash { get { return _hash; } }
 
-        public static SaltedHash Create(string password) {
+        public static SaltedHash Create(string password)
+        {
             string salt = _createSalt();
             string hash = _calculateHash(salt, password);
             return new SaltedHash(salt, hash);
         }
 
-        public static SaltedHash Create(string salt, string hash) {
+        public static SaltedHash Create(string salt, string hash)
+        {
             return new SaltedHash(salt, hash);
         }
 
-        public bool Verify(string password) {
+        public bool Verify(string password)
+        {
             string h = _calculateHash(_salt, password);
             return _hash.Equals(h);
         }
 
-        private SaltedHash(string s, string h) {
+        private SaltedHash(string s, string h)
+        {
             _salt = s;
             _hash = h;
         }
 
-        private static string _createSalt() {
+        private static string _createSalt()
+        {
             byte[] r = _createRandomBytes(saltLength);
             return Convert.ToBase64String(r);
         }
 
-        private static byte[] _createRandomBytes(int len) {
+        private static byte[] _createRandomBytes(int len)
+        {
             byte[] r = new byte[len];
             new RNGCryptoServiceProvider().GetBytes(r);
             return r;
         }
 
-        private static string _calculateHash(string salt, string password) {
+        private static string _calculateHash(string salt, string password)
+        {
             byte[] data = _toByteArray(salt + password);
             byte[] hash = _calculateHash(data);
             return Convert.ToBase64String(hash);
         }
 
-        private static byte[] _calculateHash(byte[] data) {
+        private static byte[] _calculateHash(byte[] data)
+        {
             return new SHA1CryptoServiceProvider().ComputeHash(data);
         }
 
-        private static byte[] _toByteArray(string s) {
+        private static byte[] _toByteArray(string s)
+        {
             return System.Text.Encoding.UTF8.GetBytes(s);
         }
     }
-    #endregion
 }

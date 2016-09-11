@@ -17,13 +17,19 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Profile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Role.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Persistable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProfileProviderBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Resources\Messages.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Resources\Messages.Designer.cs">
+      <DependentUpon>Messages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)RoleProviderBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SecurityUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Messages.resx" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Messages.resx">
+      <CustomToolNamespace>Velyo.Web.Security.Resources</CustomToolNamespace>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

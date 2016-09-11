@@ -12,7 +12,7 @@ namespace Velyo.Web.Security.Store {
     /// <summary>
     /// 
     /// </summary>
-    public partial class XmlProfileStore : Persistable<List<XmlProfile>> {
+    public partial class XmlProfileStore : XmlStore<List<XmlProfile>> {
 
         #region Properties  /////////////////////////////////////////////////////////////
 
