@@ -6,11 +6,11 @@
     <SharedGUID>bb01c50b-63d3-47b8-bc09-a98e553f6f89</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Shared</Import_RootNamespace>
+    <Import_RootNamespace>Velyo.Web.Security</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
+    <None Include="$(MSBuildThisFileDirectory)Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MembershipProviderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Gender.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Card.cs" />

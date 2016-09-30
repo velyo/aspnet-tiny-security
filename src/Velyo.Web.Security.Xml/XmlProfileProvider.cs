@@ -20,6 +20,12 @@ namespace Velyo.Web.Security
         private XmlProfileStore _store;
 
 
+        ~XmlProfileProvider()
+        {
+            Dispose(false);
+        }
+
+
         /// <summary>
         /// Gets the profiles.
         /// </summary>
@@ -41,10 +47,19 @@ namespace Velyo.Web.Security
         /// </summary>
         public void Dispose()
         {
-            if (_store != null)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if(disposing)
             {
-                _store.Dispose();
-                _store = null;
+                if (_store != null)
+                {
+                    _store.Dispose();
+                    _store = null;
+                }
             }
         }
 
@@ -377,7 +392,7 @@ namespace Velyo.Web.Security
                     PrepareDataForSaving(ref names, ref valuesString, ref valuesBinary, true, collection, isAuthenticated);
 
                     // save data
-                    if (!string.IsNullOrWhiteSpace(valuesString) || valuesBinary != null)
+                    if (!string.IsNullOrWhiteSpace(valuesString) || (valuesBinary != null))
                     {
                         Encoding encoding = Encoding.UTF8;
 
@@ -404,7 +419,7 @@ namespace Velyo.Web.Security
             }
         }
 
-        #region - Helpers -
+#region - Helpers -
 
         /// <summary>
         /// Creates the profile info collection.
@@ -442,9 +457,9 @@ namespace Velyo.Web.Security
             }
         }
 
-        #endregion
+#endregion
 
-        #region - Initialize -
+#region - Initialize -
 
         /// <summary>
         /// Initializes the provider.
@@ -479,6 +494,6 @@ namespace Velyo.Web.Security
             if (!folder.EndsWith("/")) folder += "/";
             _file = HostingEnvironment.MapPath(string.Format("{0}{1}", folder, fileName));
         }
-        #endregion
+#endregion
     }
 }

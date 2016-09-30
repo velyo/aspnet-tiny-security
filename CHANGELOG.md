@@ -2,7 +2,7 @@
 
 These are the changes and features for the future releases.
 
-- [ ] Multi framework target builds (NET20, NET35, NET40, NET45)
+- [ ] Multi-targeting framework builds (NET20, NET35, NET40, NET45)
 - [ ] NET45+ async IO/Net operations
 - [ ] NET35/NET40 async IO/NET operations
 

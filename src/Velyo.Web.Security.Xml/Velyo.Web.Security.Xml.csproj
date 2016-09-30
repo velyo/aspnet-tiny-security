@@ -1,70 +1,112 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{504FDAAB-00BA-4EBF-8C7E-E683B17149E5}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Velyo.Web.Security</RootNamespace>
-    <AssemblyName>Velyo.Web.Security.Xml</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Store\Gender.cs" />
-    <Compile Include="Store\XmlICard.cs" />
-    <Compile Include="Store\XmlICardStore.cs" />
-    <Compile Include="Store\XmlProfile.cs" />
-    <Compile Include="Store\XmlProfileStore.cs" />
-    <Compile Include="Store\XmlRole.cs" />
-    <Compile Include="Store\XmlRoleStore.cs" />
-    <Compile Include="Store\XmlUser.cs" />
-    <Compile Include="Store\XmlUserStore.cs" />
-    <Compile Include="XmlMembershipProvider.cs" />
-    <Compile Include="XmlProfileProvider.cs" />
-    <Compile Include="XmlRoleProvider.cs" />
-    <Compile Include="XmlStore.cs" />
-  </ItemGroup>
-  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{504FDAAB-00BA-4EBF-8C7E-E683B17149E5}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Velyo.Web.Security</RootNamespace>
+        <AssemblyName>Velyo.Web.Security.Xml</AssemblyName>
+        <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <TargetFrameworkProfile />
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE;NET45</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <Prefer32Bit>false</Prefer32Bit>
+        <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet20|AnyCPU'">
+        <DebugSymbols>true</DebugSymbols>
+        <OutputPath>bin\DebugNet20\</OutputPath>
+        <DefineConstants>DEBUG;TRACE;NET20</DefineConstants>
+        <DebugType>full</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+        <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet35|AnyCPU'">
+        <DebugSymbols>true</DebugSymbols>
+        <OutputPath>bin\DebugNet35\</OutputPath>
+        <DefineConstants>DEBUG;TRACE;NET35</DefineConstants>
+        <DebugType>full</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+        <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE;NET45</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <Prefer32Bit>false</Prefer32Bit>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet20|AnyCPU'">
+        <OutputPath>bin\ReleaseNet20\</OutputPath>
+        <DefineConstants>TRACE;NET20</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+        <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet35|AnyCPU'">
+        <OutputPath>bin\ReleaseNet35\</OutputPath>
+        <DefineConstants>TRACE;NET35</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+        <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System" />
+        <Reference Include="System.configuration" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Web" />
+        <Reference Include="System.Web.ApplicationServices" />
+        <Reference Include="System.Xml.Linq" />
+        <Reference Include="System.Data.DataSetExtensions" />
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Net.Http" />
+        <Reference Include="System.Xml" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Store\Gender.cs" />
+        <Compile Include="Store\XmlICard.cs" />
+        <Compile Include="Store\XmlICardStore.cs" />
+        <Compile Include="Store\XmlProfile.cs" />
+        <Compile Include="Store\XmlProfileStore.cs" />
+        <Compile Include="Store\XmlRole.cs" />
+        <Compile Include="Store\XmlRoleStore.cs" />
+        <Compile Include="Store\XmlUser.cs" />
+        <Compile Include="Store\XmlUserStore.cs" />
+        <Compile Include="XmlMembershipProvider.cs" />
+        <Compile Include="XmlProfileProvider.cs" />
+        <Compile Include="XmlRoleProvider.cs" />
+        <Compile Include="XmlStore.cs" />
+    </ItemGroup>
+    <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

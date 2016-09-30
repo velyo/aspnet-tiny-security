@@ -261,7 +261,9 @@ namespace Velyo.Web.Security
             }
             else if (PasswordFormat == MembershipPasswordFormat.Hashed)
             {
+#pragma warning disable CS0618 // 'FormsAuthentication.HashPasswordForStoringInConfigFile(string, string)' is obsolete: 'The recommended alternative is to use the Membership APIs, such as Membership.CreateUser. For more information, see http://go.microsoft.com/fwlink/?LinkId=252463.'
                 return FormsAuthentication.HashPasswordForStoringInConfigFile((salt + password), "SHA1");
+#pragma warning restore CS0618 // 'FormsAuthentication.HashPasswordForStoringInConfigFile(string, string)' is obsolete: 'The recommended alternative is to use the Membership APIs, such as Membership.CreateUser. For more information, see http://go.microsoft.com/fwlink/?LinkId=252463.'
             }
             else if (PasswordFormat == MembershipPasswordFormat.Encrypted)
             {
@@ -348,7 +350,7 @@ namespace Velyo.Web.Security
             string defaultAppName = System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath;
             ApplicationName = config.GetString("applicationName", defaultAppName);
 
-            // fecth provider settings
+            // fetch provider settings
             _enablePasswordReset = config.GetBool("enablePasswordReset", true);
             _enablePasswordRetrieval = config.GetBool("enablePasswordRetrieval", false);
             _maxInvalidPasswordAttempts = config.GetInt("maxInvalidPasswordAttempts", 5);
@@ -622,12 +624,12 @@ namespace Velyo.Web.Security
             // verify question and answer, if required
             if (RequiresQuestionAndAnswer)
             {
-                if (question.IsNullOrEmpty() || question.Length > 0x100)
+                if (string.IsNullOrEmpty(question) || question.Length > 0x100)
                 {
                     status = MembershipCreateStatus.InvalidQuestion;
                     return false;
                 }
-                if (answer.IsNullOrEmpty() || (answer.Length > 0x80))
+                if (string.IsNullOrEmpty(answer) || (answer.Length > 0x80))
                 {
                     status = MembershipCreateStatus.InvalidAnswer;
                     return false;

@@ -1,16 +1,16 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Velyo.Web.Security;
 
-namespace Artem.Web.Security.Tests
+namespace Artem.Web.Security.Xml.Tests
 {
     /// <summary>
     ///This is a test class for PersistableTest and is intended
     ///to contain all PersistableTest Unit Tests
     ///</summary>
     [TestClass]
-    public class XmlStoreTest
+    public class XmlStoreTests
     {
         private static string Path { get; set; }
 
@@ -23,19 +23,19 @@ namespace Artem.Web.Security.Tests
 
 
         [TestMethod]
-        public void DeleteTest()
+        public void XmlStore_Delete()
         {
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         [TestMethod]
-        public void LoadTest()
+        public void XmlStore_Load()
         {
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         [TestMethod]
-        public void SaveBatchTest()
+        public void XmlStore_Save_Batch()
         {
             var store = new XmlStore<People>(Path);
 
@@ -53,7 +53,7 @@ namespace Artem.Web.Security.Tests
         }
 
         [TestMethod]
-        public void SaveDirectBatchTest()
+        public void XmlStore_Save_DirectBatch()
         {
             var store = new XmlStore<People>(Path) { DirectWrite = true };
 
@@ -71,7 +71,7 @@ namespace Artem.Web.Security.Tests
         }
 
         [TestMethod]
-        public void SaveStressTest()
+        public void XmlStore_Save_Stress()
         {
             var store = new XmlStore<People>(Path);
 
@@ -88,7 +88,7 @@ namespace Artem.Web.Security.Tests
         }
 
         [TestMethod]
-        public void SaveDirectStressTest()
+        public void XmlStore_Save_DirectStress()
         {
             var store = new XmlStore<People>(Path) { DirectWrite = true };
 
@@ -105,19 +105,19 @@ namespace Artem.Web.Security.Tests
         }
 
         [TestMethod]
-        public void ReadThreadingTest()
+        public void XmlStore_Read_MultiThread()
         {
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         [TestMethod]
-        public void WriteThreadingTest()
+        public void XmlStore_Write_MultiThread()
         {
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         [TestMethod]
-        public void ReadWriteThreadingTest()
+        public void XmlStore_ReadWrite_MultiThread()
         {
             Assert.Inconclusive("Verify the correctness of this test method.");
         }

@@ -18,6 +18,12 @@ namespace Velyo.Web.Security
         private XmlRoleStore _store;
 
 
+        ~XmlRoleProvider()
+        {
+            Dispose(false);
+        }
+
+
         /// <summary>
         /// Gets the roles.
         /// </summary>
@@ -42,10 +48,19 @@ namespace Velyo.Web.Security
         /// </summary>
         public void Dispose()
         {
-            if (_store != null)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if(disposing)
             {
-                _store.Dispose();
-                _store = null;
+                if (_store != null)
+                {
+                    _store.Dispose();
+                    _store = null;
+                }
             }
         }
 
@@ -103,7 +118,7 @@ namespace Velyo.Web.Security
             }
             else
             {
-                throw new ProviderException(Messages.RoleExists.F(roleName));
+                throw new ProviderException(string.Format(Messages.RoleExists, roleName));
             }
         }
 
@@ -232,7 +247,7 @@ namespace Velyo.Web.Security
             }
             else
             {
-                throw new ProviderException(Messages.RoleNotExists.F(roleName));
+                throw new ProviderException(string.Format(Messages.RoleNotExists, roleName));
             }
         }
 
@@ -258,7 +273,7 @@ namespace Velyo.Web.Security
             }
             else
             {
-                throw new ProviderException(Messages.RoleNotExists.F(roleName));
+                throw new ProviderException(string.Format(Messages.RoleNotExists, roleName));
             }
         }
 

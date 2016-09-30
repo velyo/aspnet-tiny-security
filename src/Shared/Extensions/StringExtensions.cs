@@ -6,17 +6,6 @@
     static class StringExtensions
     {
         /// <summary>
-        /// Formats the specified string with params' values.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="args">The args.</param>
-        /// <returns></returns>
-        public static string F(this string value, params object[] args)
-        {
-            return (!string.IsNullOrEmpty(value)) ? string.Format(value, args) : value;
-        }
-
-        /// <summary>
         /// Determines whether the specified string is null.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -41,15 +30,22 @@
         }
 
         /// <summary>
-        /// Determines whether the specified <b>string</b> is not null or empty.
+        /// Determines whether the specified string is null or white space.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>
-        /// 	<c>true</c> if [is not null or empty] [the specified value]; otherwise, <c>false</c>.
+        ///     <c>true</c> if [is null or white space] [the specified value]; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsNotNullOrEmpty(this string value)
+        public static bool IsNullOrWhiteSpace(this string value)
         {
-            return !IsNullOrEmpty(value);
+            if (value == null) return true;
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (!char.IsWhiteSpace(value[i])) return false;
+            }
+
+            return true;
         }
     }
 }
