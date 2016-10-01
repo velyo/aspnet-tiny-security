@@ -11,8 +11,6 @@ namespace Velyo.Web.Security
 {
     public abstract class MembershipProviderBase : MembershipProvider
     {
-        private static readonly object _syncRoot = new object();
-
         private bool _enablePasswordReset;
         private bool _enablePasswordRetrieval;
         private int _maxInvalidPasswordAttempts;
@@ -24,11 +22,12 @@ namespace Velyo.Web.Security
         private bool _requiresQuestionAndAnswer;
         private bool _requiresUniqueEmail;
 
+
         /// <summary>
         /// Gets the sync root.
         /// </summary>
         /// <value>The sync root.</value>
-        public static object SyncRoot { get { return _syncRoot; } }
+        public static object SyncRoot { get; } = new object();
 
         /// <summary>
         /// The name of the application using the custom membership provider.

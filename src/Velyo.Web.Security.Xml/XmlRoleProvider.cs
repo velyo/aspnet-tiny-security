@@ -331,7 +331,7 @@ namespace Velyo.Web.Security
             if (config == null) throw new ArgumentNullException(nameof(config));
 
             // prerequisite
-            if (string.IsNullOrWhiteSpace(name))
+            if (name.IsNullOrWhiteSpace())
             {
                 name = "XmlRoleProvider";
             }

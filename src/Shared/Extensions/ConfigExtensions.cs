@@ -1,6 +1,6 @@
 ﻿namespace System.Collections.Specialized
 {
-    static class NameValueCollectionExtensions
+    static class ConfigExtensions
     {
         /// <summary>
         /// Gets the bool.
@@ -12,11 +12,13 @@
         public static bool GetBool(this NameValueCollection collection, string key, bool defaultValue)
         {
             bool result = defaultValue;
-            string value = collection[key];
+            string value = collection?[key];
+
             if (!string.IsNullOrEmpty(value))
             {
                 bool.TryParse(value, out result);
             }
+
             return result;
         }
 
@@ -41,11 +43,13 @@
         public static DateTime GetDate(this NameValueCollection collection, string key, DateTime defaultValue)
         {
             DateTime result = defaultValue;
-            string value = collection[key];
+            string value = collection?[key];
+
             if (!string.IsNullOrEmpty(value))
             {
                 DateTime.TryParse(value, out result);
             }
+
             return result;
         }
 
@@ -71,11 +75,13 @@
         public static T GetEnum<T>(this NameValueCollection collection, string key, T defaultValue)
         {
             T result = defaultValue;
-            string value = collection[key];
+            string value = collection?[key];
+
             if (!string.IsNullOrEmpty(value))
             {
                 result = (T)Enum.Parse(typeof(T), value, true);
             }
+
             return result;
         }
 
@@ -101,11 +107,13 @@
         public static int GetInt(this NameValueCollection collection, string key, int defaultValue)
         {
             int result = defaultValue;
-            string value = collection[key];
+            string value = collection?[key];
+
             if (!string.IsNullOrEmpty(value))
             {
                 int.TryParse(value, out result);
             }
+
             return result;
         }
 
@@ -129,7 +137,7 @@
         /// <returns></returns>
         public static string GetString(this NameValueCollection collection, string key, string defaultValue)
         {
-            return collection[key] ?? defaultValue;
+            return collection?[key] ?? defaultValue;
         }
 
         /// <summary>

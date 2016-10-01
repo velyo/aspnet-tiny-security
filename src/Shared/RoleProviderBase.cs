@@ -6,9 +6,6 @@ namespace Velyo.Web.Security
 {
     public abstract class RoleProviderBase : RoleProvider
     {
-        private static readonly object _syncRoot = new object();
-
-
         /// <summary>
         /// Gets or sets the name of the application to store and retrieve role information for.
         /// </summary>
@@ -38,7 +35,7 @@ namespace Velyo.Web.Security
         /// Gets the sync root.
         /// </summary>
         /// <value>The sync root.</value>
-        public static object SyncRoot { get { return _syncRoot; } }
+        public static object SyncRoot { get; } = new object();
 
         /// <summary>
         /// Gets a value indicating whether [use universal time].

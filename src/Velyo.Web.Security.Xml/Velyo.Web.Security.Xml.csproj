@@ -24,16 +24,16 @@
         <Prefer32Bit>false</Prefer32Bit>
         <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet20|AnyCPU'">
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
         <DebugSymbols>true</DebugSymbols>
-        <OutputPath>bin\DebugNet20\</OutputPath>
-        <DefineConstants>DEBUG;TRACE;NET20</DefineConstants>
+        <OutputPath>bin\DebugNet40\</OutputPath>
+        <DefineConstants>DEBUG;TRACE;NET40</DefineConstants>
         <DebugType>full</DebugType>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
         <ErrorReport>prompt</ErrorReport>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-        <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet35|AnyCPU'">
         <DebugSymbols>true</DebugSymbols>
@@ -55,15 +55,15 @@
         <WarningLevel>4</WarningLevel>
         <Prefer32Bit>false</Prefer32Bit>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet20|AnyCPU'">
-        <OutputPath>bin\ReleaseNet20\</OutputPath>
-        <DefineConstants>TRACE;NET20</DefineConstants>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
+        <OutputPath>bin\ReleaseNet40\</OutputPath>
+        <DefineConstants>TRACE;NET40</DefineConstants>
         <Optimize>true</Optimize>
         <DebugType>pdbonly</DebugType>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <ErrorReport>prompt</ErrorReport>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-        <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet35|AnyCPU'">
         <OutputPath>bin\ReleaseNet35\</OutputPath>

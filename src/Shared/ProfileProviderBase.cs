@@ -5,14 +5,12 @@ using System.IO;
 using System.Text;
 using System.Web.Profile;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace Velyo.Web.Security
 {
     public abstract class ProfileProviderBase : ProfileProvider
     {
-        private static readonly object _syncRoot = new object();
-
-
         /// <summary>
         /// Gets or sets the name of the currently running application.
         /// </summary>
@@ -42,7 +40,7 @@ namespace Velyo.Web.Security
         /// Gets the sync root.
         /// </summary>
         /// <value>The sync root.</value>
-        public static object SyncRoot { get { return _syncRoot; } }
+        public static object SyncRoot { get; } = new object();
 
         /// <summary>
         /// Gets a value indicating whether [use universal time].
@@ -85,22 +83,28 @@ namespace Velyo.Web.Security
             string binaryValues,
             SettingsPropertyValueCollection svc)
         {
+            // property names are not provided, then nothing to parse for
+            if (propertyNames.IsNullOrEmpty()) return;
+
+            // any values are not provided, then nothing to parse for
+            if (stringValues.IsNullOrEmpty() && binaryValues.IsNullOrEmpty()) return;
+
             /// decode
             Encoding encoding = Encoding.UTF8;
             string[] names = encoding.GetString(Convert.FromBase64String(propertyNames)).Split(':');
-            byte[] valuesBinary = null;
-            string valuesString = null;
+            string values = null;
+            byte[] binaries = null;
 
-            if (!string.IsNullOrEmpty(binaryValues))
+            if (!stringValues.IsNullOrEmpty())
             {
-                valuesBinary = Convert.FromBase64String(binaryValues);
+                values = encoding.GetString(Convert.FromBase64String(stringValues));
             }
-            if (!string.IsNullOrEmpty(stringValues))
+            if (!binaryValues.IsNullOrEmpty())
             {
-                valuesString = encoding.GetString(Convert.FromBase64String(stringValues));
+                binaries = Convert.FromBase64String(binaryValues);
             }
 
-            ParseProfileData(names, valuesString, valuesBinary, svc);
+            ParseProfileData(names, values, binaries, svc);
         }
 
         /// <summary>
@@ -108,159 +112,155 @@ namespace Velyo.Web.Security
         /// </summary>
         /// <param name="names">The names.</param>
         /// <param name="values">The values.</param>
-        /// <param name="buf">The buffer.</param>
+        /// <param name="binaries">The buffer.</param>
         /// <param name="properties">The properties.</param>
-        protected internal void ParseProfileData(
-            string[] names, string values, byte[] buf, SettingsPropertyValueCollection properties)
+        protected internal virtual void ParseProfileData(
+            string[] names, string values, byte[] binaries, SettingsPropertyValueCollection properties)
         {
-            if (((names != null) && (values != null)) || ((buf != null) && (properties != null)))
+            try
             {
-                try
+                for (int num1 = 0; num1 < (names.Length / 4); num1++)
                 {
-                    for (int num1 = 0; num1 < (names.Length / 4); num1++)
+                    string text1 = names[num1 * 4];
+                    SettingsPropertyValue value1 = properties[text1];
+                    if (value1 != null)
                     {
-                        string text1 = names[num1 * 4];
-                        SettingsPropertyValue value1 = properties[text1];
-                        if (value1 != null)
+                        int num2 = int.Parse(names[(num1 * 4) + 2], CultureInfo.InvariantCulture);
+                        int num3 = int.Parse(names[(num1 * 4) + 3], CultureInfo.InvariantCulture);
+                        if ((num3 == -1) && !value1.Property.PropertyType.IsValueType)
                         {
-                            int num2 = int.Parse(names[(num1 * 4) + 2], CultureInfo.InvariantCulture);
-                            int num3 = int.Parse(names[(num1 * 4) + 3], CultureInfo.InvariantCulture);
-                            if ((num3 == -1) && !value1.Property.PropertyType.IsValueType)
-                            {
-                                value1.PropertyValue = null;
-                                value1.IsDirty = false;
-                                value1.Deserialized = true;
-                            }
-                            if (((names[(num1 * 4) + 1] == "S") && (num2 >= 0)) && ((num3 > 0) && (values.Length >= (num2 + num3))))
-                            {
-                                value1.SerializedValue = values.Substring(num2, num3);
-                            }
-                            if (((names[(num1 * 4) + 1] == "B") && (num2 >= 0)) && ((num3 > 0) && (buf.Length >= (num2 + num3))))
-                            {
-                                byte[] buffer1 = new byte[num3];
-                                Buffer.BlockCopy(buf, num2, buffer1, 0, num3);
-                                value1.SerializedValue = buffer1;
-                            }
+                            value1.PropertyValue = null;
+                            value1.IsDirty = false;
+                            value1.Deserialized = true;
+                        }
+                        if (((names[(num1 * 4) + 1] == "S") && (num2 >= 0)) && ((num3 > 0) && (values.Length >= (num2 + num3))))
+                        {
+                            value1.SerializedValue = values.Substring(num2, num3);
+                        }
+                        if (((names[(num1 * 4) + 1] == "B") && (num2 >= 0)) && ((num3 > 0) && (binaries.Length >= (num2 + num3))))
+                        {
+                            byte[] buffer1 = new byte[num3];
+                            Buffer.BlockCopy(binaries, num2, buffer1, 0, num3);
+                            value1.SerializedValue = buffer1;
                         }
                     }
                 }
-                catch { }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex);
             }
         }
 
         /// <summary>
         /// Prepares the data for saving.
         /// </summary>
-        /// <param name="allNames">All names.</param>
-        /// <param name="allValues">All values.</param>
-        /// <param name="buf">The buf.</param>
+        /// <param name="names">All names.</param>
+        /// <param name="values">All values.</param>
+        /// <param name="binaries">The buf.</param>
         /// <param name="binarySupported">if set to <c>true</c> [binary supported].</param>
         /// <param name="properties">The properties.</param>
         /// <param name="userIsAuthenticated">if set to <c>true</c> [user is authenticated].</param>
         protected virtual void PrepareDataForSaving(
-            ref string allNames,
-            ref string allValues,
-            ref byte[] buf,
+            ref string names,
+            ref string values,
+            ref byte[] binaries,
             bool binarySupported,
             SettingsPropertyValueCollection properties,
             bool userIsAuthenticated)
         {
-
             StringBuilder builder1 = new StringBuilder();
             StringBuilder builder2 = new StringBuilder();
-            MemoryStream stream1 = binarySupported ? new MemoryStream() : null;
+            MemoryStream stream = binarySupported ? new MemoryStream() : null;
+
             try
             {
-                try
+                bool flag = false;
+
+                foreach (SettingsPropertyValue value1 in properties)
                 {
-                    bool flag1 = false;
-                    foreach (SettingsPropertyValue value1 in properties)
+                    if (!value1.IsDirty)
                     {
-                        if (!value1.IsDirty)
-                        {
-                            continue;
-                        }
-                        if (userIsAuthenticated || ((bool)value1.Property.Attributes["AllowAnonymous"]))
-                        {
-                            flag1 = true;
-                            break;
-                        }
+                        continue;
                     }
-                    if (!flag1)
+                    if (userIsAuthenticated || ((bool)value1.Property.Attributes["AllowAnonymous"]))
                     {
-                        return;
+                        flag = true;
+                        break;
                     }
-                    foreach (SettingsPropertyValue value2 in properties)
+                }
+
+                if (!flag) return;
+
+                foreach (SettingsPropertyValue value2 in properties)
+                {
+                    if (!userIsAuthenticated && !((bool)value2.Property.Attributes["AllowAnonymous"]))
                     {
-                        if (!userIsAuthenticated && !((bool)value2.Property.Attributes["AllowAnonymous"]))
+                        continue;
+                    }
+                    if (value2.IsDirty || !value2.UsingDefaultValue)
+                    {
+                        int num1 = 0;
+                        int num2 = 0;
+                        string text1 = null;
+                        if (value2.Deserialized && (value2.PropertyValue == null))
                         {
-                            continue;
+                            num1 = -1;
                         }
-                        if (value2.IsDirty || !value2.UsingDefaultValue)
+                        else
                         {
-                            int num1 = 0;
-                            int num2 = 0;
-                            string text1 = null;
-                            if (value2.Deserialized && (value2.PropertyValue == null))
+                            object obj1 = value2.SerializedValue;
+                            if (obj1 == null)
                             {
                                 num1 = -1;
                             }
                             else
                             {
-                                object obj1 = value2.SerializedValue;
-                                if (obj1 == null)
+                                if (!(obj1 is string) && !binarySupported)
                                 {
-                                    num1 = -1;
+                                    obj1 = Convert.ToBase64String((byte[])obj1);
+                                }
+                                if (obj1 is string)
+                                {
+                                    text1 = (string)obj1;
+                                    num1 = text1.Length;
+                                    num2 = builder2.Length;
                                 }
                                 else
                                 {
-                                    if (!(obj1 is string) && !binarySupported)
-                                    {
-                                        obj1 = Convert.ToBase64String((byte[])obj1);
-                                    }
-                                    if (obj1 is string)
-                                    {
-                                        text1 = (string)obj1;
-                                        num1 = text1.Length;
-                                        num2 = builder2.Length;
-                                    }
-                                    else
-                                    {
-                                        byte[] buffer1 = (byte[])obj1;
-                                        num2 = (int)stream1.Position;
-                                        stream1.Write(buffer1, 0, buffer1.Length);
-                                        stream1.Position = num2 + buffer1.Length;
-                                        num1 = buffer1.Length;
-                                    }
+                                    byte[] buffer1 = (byte[])obj1;
+
+                                    num2 = (int)stream.Position;
+                                    stream.Write(buffer1, 0, buffer1.Length);
+                                    stream.Position = num2 + buffer1.Length;
+                                    num1 = buffer1.Length;
                                 }
                             }
-                            string[] textArray1 = new string[8] { value2.Name, ":", (text1 != null) ? "S" : "B", ":", num2.ToString(CultureInfo.InvariantCulture), ":", num1.ToString(CultureInfo.InvariantCulture), ":" };
-                            builder1.Append(string.Concat(textArray1));
-                            if (text1 != null)
-                            {
-                                builder2.Append(text1);
-                            }
+                        }
+                        string[] textArray1 = new string[8] { value2.Name, ":", (text1 != null) ? "S" : "B", ":", num2.ToString(CultureInfo.InvariantCulture), ":", num1.ToString(CultureInfo.InvariantCulture), ":" };
+                        builder1.Append(string.Concat(textArray1));
+                        if (text1 != null)
+                        {
+                            builder2.Append(text1);
                         }
                     }
-                    if (binarySupported)
-                    {
-                        buf = stream1.ToArray();
-                    }
                 }
-                finally
+                if (binarySupported)
                 {
-                    if (stream1 != null)
-                    {
-                        stream1.Close();
-                    }
+                    binaries = stream.ToArray();
                 }
             }
-            catch
+            finally
             {
-                throw;
+                if (stream != null)
+                {
+                    stream.Close();
+                    stream = null;
+                }
             }
-            allNames = builder1.ToString();
-            allValues = builder2.ToString();
+
+            names = builder1.ToString();
+            values = builder2.ToString();
         }
     }
 }

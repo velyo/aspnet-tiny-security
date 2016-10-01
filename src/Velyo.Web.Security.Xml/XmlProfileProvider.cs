@@ -392,7 +392,7 @@ namespace Velyo.Web.Security
                     PrepareDataForSaving(ref names, ref valuesString, ref valuesBinary, true, collection, isAuthenticated);
 
                     // save data
-                    if (!string.IsNullOrWhiteSpace(valuesString) || (valuesBinary != null))
+                    if (!valuesString.IsNullOrWhiteSpace() || (valuesBinary != null))
                     {
                         Encoding encoding = Encoding.UTF8;
 
