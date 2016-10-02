@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Configuration;
+using System.Web.Configuration;
 using System.Web.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -20,10 +22,10 @@ namespace Velyo.Web.Security.Tests
             settings.Add("caseSensitive", "true");
             settings.Add("enablePasswordReset", "true");
             settings.Add("enablePasswordRetrieval", "true");
-            settings.Add("maxInvalidPasswordAttempts", "5");
-            settings.Add("minRequiredNonAlphanumericCharacters", "0");
-            settings.Add("minRequiredPasswordLength", "4");
-            settings.Add("passwordAttemptWindow", "10");
+            settings.Add("maxInvalidPasswordAttempts", "10");
+            settings.Add("minRequiredNonAlphanumericCharacters", "2");
+            settings.Add("minRequiredPasswordLength", "5");
+            settings.Add("passwordAttemptWindow", "8");
             settings.Add("passwordFormat", "Clear");
             settings.Add("passwordStrengthRegularExpression", "Test");
             settings.Add("requiresQuestionAndAnswer", "true");
@@ -37,10 +39,10 @@ namespace Velyo.Web.Security.Tests
             Assert.AreEqual(name, provider.Name);
             Assert.AreEqual(true, provider.EnablePasswordReset);
             Assert.AreEqual(true, provider.EnablePasswordRetrieval);
-            Assert.AreEqual(5, provider.MaxInvalidPasswordAttempts);
-            Assert.AreEqual(0, provider.MinRequiredNonAlphanumericCharacters);
-            Assert.AreEqual(4, provider.MinRequiredPasswordLength);
-            Assert.AreEqual(10, provider.PasswordAttemptWindow);
+            Assert.AreEqual(10, provider.MaxInvalidPasswordAttempts);
+            Assert.AreEqual(2, provider.MinRequiredNonAlphanumericCharacters);
+            Assert.AreEqual(5, provider.MinRequiredPasswordLength);
+            Assert.AreEqual(8, provider.PasswordAttemptWindow);
             Assert.AreEqual(MembershipPasswordFormat.Clear, provider.PasswordFormat);
             Assert.AreEqual("Test", provider.PasswordStrengthRegularExpression);
             Assert.AreEqual(true, provider.RequiresQuestionAndAnswer);
@@ -108,58 +110,80 @@ namespace Velyo.Web.Security.Tests
         }
 
         [TestMethod]
-        public void MembershipProvider_ChangePassword()
+        public void MembershipProvider_EncodePassword_Clear()
         {
+            var provider = new MembershipProviderMock();
+            var settings = new NameValueCollection();
+            var name = "TestMembershipProvider";
+
+            settings.Add("applicationName", "TestApplication");
+            settings.Add("passwordFormat", "Clear");
+
+            provider.Initialize(name, settings);
+
+            var password = "test";
+            string salt = null;
+            string encodedPassword = provider.EncodePassword(password, ref salt);
+            string decodedPassword = provider.DecodePassword(encodedPassword);
+
+            Assert.AreEqual(password, decodedPassword);
         }
 
         [TestMethod]
-        public void MembershipProvider_ChangePasswordQuestionAndAnswer()
+        public void MembershipProvider_EncodePassword_Encrypted()
         {
+            var provider = new MembershipProviderMock();
+            var settings = new NameValueCollection();
+            var name = "TestMembershipProvider";
+
+            settings.Add("applicationName", "TestApplication");
+            settings.Add("passwordFormat", "Encrypted");
+
+            provider.Initialize(name, settings);
+
+            var password = "test";
+            string salt = null;
+            string encodedPassword = provider.EncodePassword(password, ref salt);
+            string decodedPassword = provider.DecodePassword(encodedPassword);
+
+            Assert.AreEqual(password, decodedPassword);
         }
 
         [TestMethod]
-        public void MembershipProvider_DecodePassword()
+        public void MembershipProvider_EncodePassword_Hashed()
         {
-        }
+            var provider = new MembershipProviderMock();
+            var settings = new NameValueCollection();
+            var name = "TestMembershipProvider";
 
-        [TestMethod]
-        public void MembershipProvider_EncodePassword()
-        {
-        }
+            settings.Add("applicationName", "TestApplication");
+            settings.Add("passwordFormat", "Hashed");
 
-        [TestMethod]
-        public void MembershipProvider_GetPassword()
-        {
-        }
+            provider.Initialize(name, settings);
 
-        [TestMethod]
-        public void MembershipProvider_ResetPassword()
-        {
-        }
+            var password = "test";
+            string salt = null;
+            string hashedPassword1 = provider.EncodePassword(password, ref salt);
+            string hashedPassword2 = provider.EncodePassword(password, ref salt);
 
-        [TestMethod]
-        public void MembershipProvider_ValidateUser()
-        {
-        }
-
-        [TestMethod]
-        public void MembershipProvider_VerifyEmailIsUnique()
-        {
+            Assert.AreEqual(hashedPassword1, hashedPassword2);
         }
 
         [TestMethod]
         public void MembershipProvider_VerifyPasswordIsValid()
         {
-        }
+            var provider = new MembershipProviderMock();
+            var settings = new NameValueCollection();
+            var name = "TestMembershipProvider";
 
-        [TestMethod]
-        public void MembershipProvider_VerifyUserNameIsUnique()
-        {
-        }
+            settings.Add("minRequiredNonAlphanumericCharacters", "2");
 
-        [TestMethod]
-        public void MembershipProvider_VerifyUserIsValid()
-        {
+            provider.Initialize(name, settings);
+
+            Assert.IsFalse(provider.VerifyPasswordIsValid("ABC"));
+            Assert.IsFalse(provider.VerifyPasswordIsValid("ABCDE"));
+            Assert.IsFalse(provider.VerifyPasswordIsValid("ABC12"));
+            Assert.IsTrue(provider.VerifyPasswordIsValid("ABC12!?"));
         }
     }
 }

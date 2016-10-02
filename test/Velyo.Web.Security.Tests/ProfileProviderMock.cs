@@ -11,11 +11,6 @@ namespace Velyo.Web.Security.Tests
             base.GetPropertyValues(propertyNames, stringValues, binaryValues, svc);
         }
 
-        public new void ParseProfileData(string[] names, string values, byte[] buf, SettingsPropertyValueCollection properties)
-        {
-            base.ParseProfileData(names, values, buf, properties);
-        }
-
         public new void PrepareDataForSaving(ref string allNames, ref string allValues, ref byte[] buf, bool binarySupported, SettingsPropertyValueCollection properties, bool userIsAuthenticated)
         {
             base.PrepareDataForSaving(ref allNames, ref allValues, ref buf, binarySupported, properties, userIsAuthenticated);

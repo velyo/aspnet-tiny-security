@@ -77,12 +77,6 @@ namespace Velyo.Web.Security.Tests
         }
 
         [TestMethod]
-        public void ProfileProvider_ParseProfileData()
-        {
-            Assert.Inconclusive("TODO");
-        }
-
-        [TestMethod]
         public void ProfileProvider_PrepareDataForSaving()
         {
             Assert.Inconclusive("TODO");

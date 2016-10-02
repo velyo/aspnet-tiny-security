@@ -1,10 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Security;
+using Velyo.Web.Security.Models;
 
 namespace Velyo.Web.Security.Tests
 {
     class MembershipProviderMock : MembershipProviderBase
     {
+        private IList<User> _users = new List<User>();
+
+
+        public new string DecodePassword(string encodedPassword)
+        {
+            return base.DecodePassword(encodedPassword);
+        }
+
+        public new string EncodePassword(string password, ref string salt)
+        {
+            return base.EncodePassword(password, ref salt);
+        }
+
+        public new bool VerifyPasswordIsValid(string password)
+        {
+            return base.VerifyPasswordIsValid(password);
+        }
+
         public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
         {
             throw new NotImplementedException();
