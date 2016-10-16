@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Web.Profile;
 
-namespace Velyo.Web.Security.Tests
+namespace Velyo.Web.Security.Tests.Mocks
 {
     class ProfileProviderMock : ProfileProviderBase
     {

@@ -1,44 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Velyo.Web.Security.Models;
 
-namespace Velyo.Web.Security.Store {
-
+namespace Velyo.Web.Security.Store
+{
     /// <summary>
     /// TODO change XmlUserStore Delete to remove the associated ICard, if any.
     /// </summary>
-    public class XmlICardStore : XmlStore<List<XmlICard>> {
+    public class XmlCardStore : XmlStore<List<Card>>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlCardStore"/> class.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        public XmlCardStore(string fileName)
+            : base(fileName)
+        {
+        }
 
-        #region Properties  /////////////////////////////////////////////////////////////
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlCardStore"/> class.
+        /// </summary>
+        public XmlCardStore()
+            : base(null)
+        {
+        }
 
         /// <summary>
         /// Gets the entire collection of information cards.
         /// </summary>
         /// <value>The cards.</value>
-        public virtual List<XmlICard> Cards {
-            get { return base.Value ?? (base.Value = new List<XmlICard>()); }
-        }
-        #endregion
-
-        #region Construct  //////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlICardStore"/> class.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        public XmlICardStore(string fileName)
-            : base(fileName) {
+        public virtual List<Card> Cards
+        {
+            get
+            {
+                return Value;
+            }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlICardStore"/> class.
-        /// </summary>
-        public XmlICardStore()
-            : base(null) {
-        }
-        #endregion
-
-        #region Methods /////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Associates the specified user to specified information card.
@@ -46,7 +46,8 @@ namespace Velyo.Web.Security.Store {
         /// <param name="userName">Name of the user.</param>
         /// <param name="uniqueID">The unique ID.</param>
         /// <param name="ppID">The pp ID.</param>
-        public void Associate(string userName, string uniqueID, string ppID) {
+        public void Associate(string userName, string uniqueID, string ppID)
+        {
             throw new NotImplementedException();
         }
 
@@ -55,7 +56,8 @@ namespace Velyo.Web.Security.Store {
         /// </summary>
         /// <param name="userName">Name of the user.</param>
         /// <returns></returns>
-        public string FindPPIDForUser(string userName) {
+        public string FindPPIDForUser(string userName)
+        {
             throw new NotImplementedException();
         }
 
@@ -65,7 +67,8 @@ namespace Velyo.Web.Security.Store {
         /// <param name="userName">Name of the user.</param>
         /// <param name="uniqueID">The unique ID.</param>
         /// <returns></returns>
-        public string FindPPIDForUser(string userName, out string uniqueID) {
+        public string FindPPIDForUser(string userName, out string uniqueID)
+        {
             throw new NotImplementedException();
         }
 
@@ -74,7 +77,8 @@ namespace Velyo.Web.Security.Store {
         /// </summary>
         /// <param name="userName">Name of the user.</param>
         /// <returns></returns>
-        public XmlICardStore GetByUser(string userName) {
+        public XmlCardStore GetByUser(string userName)
+        {
             throw new NotImplementedException();
         }
 
@@ -83,7 +87,8 @@ namespace Velyo.Web.Security.Store {
         /// </summary>
         /// <param name="uniqueID">The unique ID.</param>
         /// <returns></returns>
-        public string Lookup(string uniqueID) {
+        public string Lookup(string uniqueID)
+        {
             throw new NotImplementedException();
         }
 
@@ -91,7 +96,8 @@ namespace Velyo.Web.Security.Store {
         /// Removes the information card specified by its unique ID.
         /// </summary>
         /// <param name="uniqueID">The unique ID.</param>
-        public void Remove(string uniqueID) {
+        public void Remove(string uniqueID)
+        {
             throw new NotImplementedException();
         }
 
@@ -100,9 +106,9 @@ namespace Velyo.Web.Security.Store {
         /// </summary>
         /// <param name="userName">Name of the user.</param>
         /// <param name="ppID">The pp ID.</param>
-        public void UnAssociate(string userName, string ppID) {
+        public void UnAssociate(string userName, string ppID)
+        {
             throw new NotImplementedException();
         }
-        #endregion
     }
 }

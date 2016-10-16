@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Velyo.Web.Security.Tests.Mocks;
 
 namespace Velyo.Web.Security.Tests
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Web.Security;
 using Velyo.Web.Security.Models;
 
-namespace Velyo.Web.Security.Tests
+namespace Velyo.Web.Security.Tests.Mocks
 {
     class MembershipProviderMock : MembershipProviderBase
     {

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Hosting;
 using System.Web.Profile;
+using Velyo.Web.Security.Models;
 using Velyo.Web.Security.Store;
 
 namespace Velyo.Web.Security
@@ -30,7 +31,7 @@ namespace Velyo.Web.Security
         /// Gets the profiles.
         /// </summary>
         /// <value>The profiles.</value>
-        private List<XmlProfile> Profiles { get { return Store.Profiles; } }
+        private List<Profile> Profiles { get { return Store.Profiles; } }
 
         /// <summary>
         /// Gets the profiles store.
@@ -155,7 +156,7 @@ namespace Velyo.Web.Security
             int pageSize,
             out int totalRecords)
         {
-            XmlProfile[] profiles;
+            Profile[] profiles;
             int pageOffset = pageIndex * pageSize;
 
             var query = from p in Profiles
@@ -197,7 +198,7 @@ namespace Velyo.Web.Security
             int pageSize,
             out int totalRecords)
         {
-            XmlProfile[] profiles;
+            Profile[] profiles;
             int pageOffset = pageIndex * pageSize;
 
             var query = from p in Profiles
@@ -238,7 +239,7 @@ namespace Velyo.Web.Security
             int pageSize,
             out int totalRecords)
         {
-            XmlProfile[] profiles;
+            Profile[] profiles;
             int pageOffset = pageIndex * pageSize;
 
             var query = from p in Profiles
@@ -277,10 +278,10 @@ namespace Velyo.Web.Security
             int pageSize,
             out int totalRecords)
         {
-            XmlProfile[] profiles;
+            Profile[] profiles;
             int pageOffset = pageIndex * pageSize;
 
-            IEnumerable<XmlProfile> query = Profiles;
+            IEnumerable<Profile> query = Profiles;
 
             if (authenticationOption != ProfileAuthenticationOption.All)
             {
@@ -341,7 +342,7 @@ namespace Velyo.Web.Security
                 string username = context["UserName"] as string;
                 if (!string.IsNullOrEmpty(username))
                 {
-                    XmlProfile profile = GetProfile(username);
+                    Profile profile = GetProfile(username);
 
                     foreach (SettingsProperty prop in collection)
                     {
@@ -398,11 +399,11 @@ namespace Velyo.Web.Security
 
                         lock (SyncRoot)
                         {
-                            XmlProfile profile = GetProfile(username);
+                            Profile profile = GetProfile(username);
 
                             if (profile == null)
                             {
-                                profile = new XmlProfile { UserName = username };
+                                profile = new Profile { UserName = username };
                                 Profiles.Add(profile);
                             }
 
@@ -426,7 +427,7 @@ namespace Velyo.Web.Security
         /// </summary>
         /// <param name="profiles">The profiles.</param>
         /// <returns></returns>
-        protected internal ProfileInfoCollection CreateProfileInfoCollection(IEnumerable<XmlProfile> profiles)
+        protected internal ProfileInfoCollection CreateProfileInfoCollection(IEnumerable<Profile> profiles)
         {
             ProfileInfoCollection collection = new ProfileInfoCollection();
 
@@ -445,7 +446,7 @@ namespace Velyo.Web.Security
         /// </summary>
         /// <param name="username">The username.</param>
         /// <returns></returns>
-        protected XmlProfile GetProfile(string username)
+        protected Profile GetProfile(string username)
         {
             var query = from p in Profiles
                         where p.UserName.Equals(username, Comparison)

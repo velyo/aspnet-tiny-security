@@ -9,7 +9,7 @@ using System.Text;
 using System.ComponentModel;
 using Velyo.Web.Security.Resources;
 
-namespace Velyo.Web.Security
+namespace Velyo.Web.Security.Store
 {
     /// <summary>
     /// Generic class for a perssitable object.
@@ -31,16 +31,10 @@ namespace Velyo.Web.Security
         private T _value;
 
         [NonSerialized]
-        private EventHandlerList _events;
-
-        [NonSerialized]
         private readonly string _file;
 
         [NonSerialized]
         private readonly XmlSerializer _serializer;
-
-        [NonSerialized]
-        private readonly object _syncRoot = new object();
 
 
         /// <summary>
@@ -57,8 +51,6 @@ namespace Velyo.Web.Security
         /// </summary>
         protected internal XmlStore()
         {
-            AutoCreate = true;
-            AutoLoad = true;
             _serializer = new XmlSerializer(typeof(T));
         }
 
@@ -107,13 +99,13 @@ namespace Velyo.Web.Security
         /// Gets or sets a value indicating whether [auto create].
         /// </summary>
         /// <value><c>true</c> if [auto create]; otherwise, <c>false</c>.</value>
-        public bool AutoCreate { get; set; }
+        public bool AutoCreate { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether [auto load].
         /// </summary>
         /// <value><c>true</c> if [auto load]; otherwise, <c>false</c>.</value>
-        public bool AutoLoad { get; set; }
+        public bool AutoLoad { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether [direct write].
@@ -125,13 +117,7 @@ namespace Velyo.Web.Security
         /// Gets the events.
         /// </summary>
         /// <value>The events.</value>
-        protected EventHandlerList Events
-        {
-            get
-            {
-                return _events ?? (_events = new EventHandlerList());
-            }
-        }
+        protected EventHandlerList Events { get; } = new EventHandlerList();
 
         /// <summary>
         /// Gets a value indicating whether this instance is empty.
@@ -153,7 +139,7 @@ namespace Velyo.Web.Security
         /// Gets or sets the sync root.
         /// </summary>
         /// <value>The sync root.</value>
-        public virtual object SyncRoot { get { return _syncRoot; } }
+        public virtual object SyncRoot { get; } = new object();
 
         /// <summary>
         /// Gets or sets the data.
@@ -211,10 +197,9 @@ namespace Velyo.Web.Security
         {
             if (disposing)
             {
-                if (_events != null)
+                if (Events != null)
                 {
-                    _events.Dispose();
-                    _events = null;
+                    Events.Dispose();
                 }
                 _value = null;
             }
@@ -321,7 +306,7 @@ namespace Velyo.Web.Security
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected virtual void OnFileChanged(EventArgs e)
         {
-            ((_events != null) ? _events[FileChangedEvent] as EventHandler : null)?.Invoke(this, e);
+            (Events?[FileChangedEvent] as EventHandler)?.Invoke(this, e);
         }
 
         /// <summary>
@@ -330,7 +315,7 @@ namespace Velyo.Web.Security
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected virtual void OnValueChanged(EventArgs e)
         {
-            ((_events != null) ? _events[ValueChangedEvent] as EventHandler : null)?.Invoke(this, e);
+            (Events?[ValueChangedEvent] as EventHandler)?.Invoke(this, e);
         }
 
         #region File change notifier
@@ -339,7 +324,7 @@ namespace Velyo.Web.Security
         /// 
         /// </summary>
         /// <param name="value"></param>
-        void AddFileNotifier()
+        private void AddFileNotifier()
         {
             HttpRuntime.Cache.Insert(
                 _file,
@@ -357,7 +342,7 @@ namespace Velyo.Web.Security
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="reason"></param>
-        void NotifyFileChanged(string key, object value, CacheItemRemovedReason reason)
+        private void NotifyFileChanged(string key, object value, CacheItemRemovedReason reason)
         {
             Value = default(T);
             OnFileChanged(EventArgs.Empty);
@@ -376,9 +361,8 @@ namespace Velyo.Web.Security
             /// <param name="fileName">Name of the file.</param>
             public FileLockScope(string fileName)
             {
-
-                string fileNameHash = CalculateMD5Hash(fileName);
-                _lock = new Mutex(false, fileNameHash);
+                string hash = CalculateMD5Hash(fileName);
+                _lock = new Mutex(false, hash);
                 _lock.WaitOne();
             }
 
@@ -426,11 +410,11 @@ namespace Velyo.Web.Security
             /// <returns>Hashed string</returns>
             private static string CalculateMD5Hash(string strInput)
             {
-                System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
+                var md5 = System.Security.Cryptography.MD5.Create();
                 byte[] inputBytes = Encoding.ASCII.GetBytes(strInput);
                 byte[] hash = md5.ComputeHash(inputBytes);
 
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 for (int i = 0; i < hash.Length; i++)
                 {
                     sb.Append(hash[i].ToString("x2"));

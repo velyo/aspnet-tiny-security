@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Web.Configuration;
 using System.Web.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Velyo.Web.Security.Tests.Mocks;
 
 namespace Velyo.Web.Security.Tests
 {
@@ -170,6 +171,19 @@ namespace Velyo.Web.Security.Tests
         }
 
         [TestMethod]
+        public void MembershipProvider_ValidateUser()
+        {
+            var provider = new MembershipProviderMock();
+            Assert.Inconclusive("Not implemented");
+        }
+
+        [TestMethod]
+        public void MembershipProvider_VerifyEmailIsUnique()
+        {
+            Assert.Inconclusive("Not implemented");
+        }
+
+        [TestMethod]
         public void MembershipProvider_VerifyPasswordIsValid()
         {
             var provider = new MembershipProviderMock();
@@ -184,6 +198,19 @@ namespace Velyo.Web.Security.Tests
             Assert.IsFalse(provider.VerifyPasswordIsValid("ABCDE"));
             Assert.IsFalse(provider.VerifyPasswordIsValid("ABC12"));
             Assert.IsTrue(provider.VerifyPasswordIsValid("ABC12!?"));
+        }
+
+        [TestMethod]
+        public void MembershipProvider_VerifyUserNameIsUnique()
+        {
+            Assert.Inconclusive("Not implemented");
+        }
+
+        [TestMethod]
+        public void MembershipProvider_VerifyUserIsValid()
+        {
+            var provider = new MembershipProviderMock();
+            Assert.Inconclusive("Not implemented");
         }
     }
 }

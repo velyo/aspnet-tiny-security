@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Velyo.Web.Security.Tests
+namespace Velyo.Web.Security.Tests.Mocks
 {
     class RoleProviderMock : RoleProviderBase
     {

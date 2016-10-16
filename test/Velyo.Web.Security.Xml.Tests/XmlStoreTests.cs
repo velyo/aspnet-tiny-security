@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Velyo.Web.Security;
+using Velyo.Web.Security.Store;
 
 namespace Artem.Web.Security.Xml.Tests
 {
@@ -136,12 +137,6 @@ namespace Artem.Web.Security.Xml.Tests
     [Serializable]
     public class People
     {
-        private List<Person> _persons;
-
-        public List<Person> Persons
-        {
-            get { return _persons ?? (_persons = new List<Person>()); }
-            set { _persons = value; }
-        }
+        public List<Person> Persons { get; set; } = new List<Person>(); 
     }
 }

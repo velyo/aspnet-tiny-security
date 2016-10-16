@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Configuration.Provider;
 using System.Linq;
 using System.Web.Hosting;
+using Velyo.Web.Security.Models;
 using Velyo.Web.Security.Resources;
 using Velyo.Web.Security.Store;
 
@@ -28,7 +29,7 @@ namespace Velyo.Web.Security
         /// Gets the roles.
         /// </summary>
         /// <value>The roles.</value>
-        protected List<XmlRole> Roles { get { return Store.Roles; } }
+        protected List<Role> Roles { get { return Store.Roles; } }
 
         /// <summary>
         /// Gets the role store.
@@ -79,7 +80,7 @@ namespace Velyo.Web.Security
             {
                 foreach (string rolename in roleNames)
                 {
-                    XmlRole role = GetRole(rolename);
+                    Role role = GetRole(rolename);
                     if (role != null)
                     {
                         foreach (string username in usernames)
@@ -102,10 +103,10 @@ namespace Velyo.Web.Security
             if (roleName == null) throw new ArgumentNullException(nameof(roleName));
             if (roleName.IndexOf(',') > 0) throw new ArgumentException(Messages.RoleCannotContainCommas);
 
-            XmlRole role = GetRole(roleName);
+            Role role = GetRole(roleName);
             if (role == null)
             {
-                role = new XmlRole
+                role = new Role
                 {
                     Name = roleName,
                     Users = new List<string>()
@@ -136,7 +137,7 @@ namespace Velyo.Web.Security
 
             lock (SyncRoot)
             {
-                XmlRole role = GetRole(roleName);
+                Role role = GetRole(roleName);
                 if (role != null)
                 {
                     if (throwOnPopulatedRole && (role.Users.Count > 0))
@@ -196,7 +197,7 @@ namespace Velyo.Web.Security
         /// </summary>
         /// <param name="roleName">The name.</param>
         /// <returns></returns>
-        public XmlRole GetRole(string roleName)
+        public Role GetRole(string roleName)
         {
             if (roleName == null) throw new ArgumentNullException(nameof(roleName));
 
@@ -237,7 +238,7 @@ namespace Velyo.Web.Security
         /// </returns>
         public override string[] GetUsersInRole(string roleName)
         {
-            XmlRole role = GetRole(roleName);
+            Role role = GetRole(roleName);
             if (role != null)
             {
                 lock (SyncRoot)
@@ -263,7 +264,7 @@ namespace Velyo.Web.Security
         {
             if (username == null) throw new ArgumentNullException(nameof(username));
 
-            XmlRole role = GetRole(roleName);
+            Role role = GetRole(roleName);
             if (role != null)
             {
                 lock (SyncRoot)
@@ -293,7 +294,7 @@ namespace Velyo.Web.Security
                         select r;
             lock (SyncRoot)
             {
-                foreach (XmlRole role in query)
+                foreach (Role role in query)
                 {
                     foreach (string username in usernames)
                     {

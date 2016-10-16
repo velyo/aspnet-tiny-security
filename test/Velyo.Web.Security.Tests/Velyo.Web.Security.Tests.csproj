@@ -97,12 +97,12 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MembershipProviderMock.cs" />
+    <Compile Include="Mocks\MembershipProviderMock.cs" />
     <Compile Include="MembershipProviderTests.cs" />
-    <Compile Include="ProfileProviderMock.cs" />
+    <Compile Include="Mocks\ProfileProviderMock.cs" />
     <Compile Include="ProfileProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoleProviderMock.cs" />
+    <Compile Include="Mocks\RoleProviderMock.cs" />
     <Compile Include="RoleProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>

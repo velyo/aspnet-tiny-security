@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Web.Hosting;
 using System.Web.Profile;
 using System.Web.Security;
+using Velyo.Web.Security.Models;
 using Velyo.Web.Security.Store;
 
 namespace Velyo.Web.Security
@@ -64,7 +65,7 @@ namespace Velyo.Web.Security
         /// Gets the users.
         /// </summary>
         /// <value>The users.</value>
-        public List<XmlUser> Users { get { return Store.Users; } }
+        public List<User> Users { get { return Store.Users; } }
 
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace Velyo.Web.Security
                     string encodedPassword = EncodePassword(password, ref salt);
 
                     var userKey = (providerUserKey != null) ? (Guid)providerUserKey : Guid.NewGuid();
-                    XmlUser user = new XmlUser
+                    var user = new User
                     {
                         UserKey = userKey,
                         UserName = username,
@@ -213,7 +214,7 @@ namespace Velyo.Web.Security
 
                 lock (SyncRoot)
                 {
-                    XmlUser user = GetInternalUser(username);
+                    User user = GetInternalUser(username);
                     if (user != null)
                     {
                         Store.Users.Remove(user);
@@ -244,7 +245,7 @@ namespace Velyo.Web.Security
         {
             if (emailToMatch == null) throw new ArgumentNullException(nameof(emailToMatch));
 
-            XmlUser[] users;
+            User[] users;
             int pageOffset = pageIndex * pageSize;
 
             try
@@ -285,7 +286,7 @@ namespace Velyo.Web.Security
             if (usernameToMatch == null) throw new ArgumentNullException(nameof(usernameToMatch));
 
             int pageOffset = pageIndex * pageSize;
-            XmlUser[] users;
+            User[] users;
 
             try
             {
@@ -321,7 +322,7 @@ namespace Velyo.Web.Security
         public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
         {
             int pageOffset = pageIndex * pageSize;
-            XmlUser[] users;
+            User[] users;
 
             try
             {
@@ -383,7 +384,7 @@ namespace Velyo.Web.Security
         {
             if (username == null) throw new ArgumentNullException(nameof(username));
 
-            XmlUser user;
+            User user;
 
             try
             {
@@ -420,7 +421,7 @@ namespace Velyo.Web.Security
             if (providerUserKey == null) throw new ArgumentNullException(nameof(providerUserKey));
             if (!(providerUserKey is Guid)) throw new ArgumentException("Invalid provider user key. Must be a Guid.");
 
-            XmlUser user;
+            User user;
             Guid key = (Guid)providerUserKey;
 
             try
@@ -459,7 +460,7 @@ namespace Velyo.Web.Security
         {
             if (email == null) throw new ArgumentNullException(nameof(email));
 
-            XmlUser user;
+            User user;
 
             try
             {
@@ -562,7 +563,7 @@ namespace Velyo.Web.Security
         /// </summary>
         /// <param name="user">The user.</param>
         /// <returns></returns>
-        private MembershipUser CreateMembershipFromInternalUser(XmlUser user)
+        private MembershipUser CreateMembershipFromInternalUser(User user)
         {
             return (user != null)
                 ? new MembershipUser(Name,
@@ -577,11 +578,11 @@ namespace Velyo.Web.Security
         /// </summary>
         /// <param name="users">The users.</param>
         /// <returns></returns>
-        private MembershipUserCollection CreateMembershipCollectionFromInternalList(IEnumerable<XmlUser> users)
+        private MembershipUserCollection CreateMembershipCollectionFromInternalList(IEnumerable<User> users)
         {
             MembershipUserCollection returnCollection = new MembershipUserCollection();
 
-            foreach (XmlUser user in users)
+            foreach (User user in users)
             {
                 returnCollection.Add(CreateMembershipFromInternalUser(user));
             }
@@ -594,7 +595,7 @@ namespace Velyo.Web.Security
         /// </summary>
         /// <param name="username">The username.</param>
         /// <returns></returns>
-        private XmlUser GetInternalUser(string username)
+        private User GetInternalUser(string username)
         {
             var comparison = Comparison;
             var query = from u in Users
@@ -616,7 +617,7 @@ namespace Velyo.Web.Security
         {
             lock (SyncRoot)
             {
-                XmlUser user = GetInternalUser(username);
+                User user = GetInternalUser(username);
                 if (user != null)
                 {
                     password = user.Password;
@@ -646,7 +647,7 @@ namespace Velyo.Web.Security
         {
             lock (SyncRoot)
             {
-                XmlUser user = GetInternalUser(username);
+                User user = GetInternalUser(username);
                 if (user != null)
                 {
                     user.LastPasswordChangeDate = UseUniversalTime ? DateTime.UtcNow : DateTime.Now;
@@ -754,8 +755,8 @@ namespace Velyo.Web.Security
 
         public static SaltedHash Create(string password)
         {
-            string salt = _createSalt();
-            string hash = _calculateHash(salt, password);
+            string salt = CreateSalt();
+            string hash = CalculateHash(salt, password);
             return new SaltedHash(salt, hash);
         }
 
@@ -766,7 +767,7 @@ namespace Velyo.Web.Security
 
         public bool Verify(string password)
         {
-            string h = _calculateHash(_salt, password);
+            string h = CalculateHash(_salt, password);
             return _hash.Equals(h);
         }
 
@@ -776,32 +777,32 @@ namespace Velyo.Web.Security
             _hash = h;
         }
 
-        private static string _createSalt()
+        private static string CreateSalt()
         {
-            byte[] r = _createRandomBytes(saltLength);
+            byte[] r = CreateRandomBytes(saltLength);
             return Convert.ToBase64String(r);
         }
 
-        private static byte[] _createRandomBytes(int len)
+        private static byte[] CreateRandomBytes(int len)
         {
             byte[] r = new byte[len];
             new RNGCryptoServiceProvider().GetBytes(r);
             return r;
         }
 
-        private static string _calculateHash(string salt, string password)
+        private static string CalculateHash(string salt, string password)
         {
-            byte[] data = _toByteArray(salt + password);
-            byte[] hash = _calculateHash(data);
+            byte[] data = ToByteArray(salt + password);
+            byte[] hash = CalculateHash(data);
             return Convert.ToBase64String(hash);
         }
 
-        private static byte[] _calculateHash(byte[] data)
+        private static byte[] CalculateHash(byte[] data)
         {
             return new SHA1CryptoServiceProvider().ComputeHash(data);
         }
 
-        private static byte[] _toByteArray(string s)
+        private static byte[] ToByteArray(string s)
         {
             return System.Text.Encoding.UTF8.GetBytes(s);
         }
